@@ -10,14 +10,12 @@ use pixi::graphics::Graphics;
 use game::GameState;
 
 pub struct EnemySystem {
-    enemy_count: u32,
     rng: OsRng,
 }
 
 impl EnemySystem {
     pub fn new() -> Self {
         Self {
-            enemy_count: 0,
             rng: OsRng::new().unwrap(),
         }
     }
@@ -25,7 +23,7 @@ impl EnemySystem {
     fn spawn_enemy(&mut self, state: &mut GameState) {
         let enemy_circle = Graphics::new();
         enemy_circle.begin_fill(constants::ENEMY_COLOR);
-        enemy_circle.draw_ellipse(0, 0, constants::ENEMY_SIZE, constants::ENEMY_SIZE);
+        enemy_circle.draw_ellipse(0.0, 0.0, constants::ENEMY_SIZE, constants::ENEMY_SIZE);
         state.app().add_child(&enemy_circle);
         
         let enemy = state.ecs().create_entity();
@@ -38,19 +36,18 @@ impl EnemySystem {
         let _ = state.ecs().set(enemy, Enemy);
         let _ = state.ecs().set(enemy, Renderer{graphics: enemy_circle});
         let _ = state.ecs().set(enemy, Collider{position: start_pos, width: constants::ENEMY_SIZE, height: constants::ENEMY_SIZE});
-        self.enemy_count += 1;
     }
 }
 
 impl System for EnemySystem {
     fn run(&mut self, state: &mut GameState, _delta: f64) {
-        if self.enemy_count == 0 {
-            self.spawn_enemy(state);
-        }
-        
         let mut enemy_ids: Vec<EntityId> = Vec::new();
         let filter = component_filter!(Position, Velocity, Enemy);
         state.ecs().collect_with(&filter, &mut enemy_ids);
+
+        if enemy_ids.len() == 0 {
+            self.spawn_enemy(state);
+        }
 
         let mut player_ids: Vec<EntityId> = Vec::new();
         let filter = component_filter!(Position, Player);

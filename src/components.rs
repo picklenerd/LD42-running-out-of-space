@@ -25,6 +25,12 @@ pub struct Enemy;
 pub struct Projectile;
 
 #[derive(Clone, PartialEq, Debug)]
+pub struct Wall;
+
+#[derive(Clone, PartialEq, Debug)]
+pub struct IceBlock;
+
+#[derive(Clone, PartialEq, Debug)]
 pub struct Collider{pub position: Position, pub width: u32, pub height: u32}
 
 impl Collider {

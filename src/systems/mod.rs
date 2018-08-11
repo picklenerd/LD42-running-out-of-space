@@ -4,6 +4,7 @@ pub mod controls;
 pub mod player;
 pub mod enemy;
 pub mod damage;
+pub mod projectile;
 
 use game::GameState;
 

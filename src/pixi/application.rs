@@ -46,4 +46,11 @@ impl Application {
             app.stage.addChild(@{&child.get_ref()});
         };
     }
+
+    pub fn remove_child(&self, child: &impl JsRef) {
+        js! { @(no_return)
+            const app = @{&self.js_reference};
+            app.stage.removeChild(@{&child.get_ref()});
+        };
+    }
 }

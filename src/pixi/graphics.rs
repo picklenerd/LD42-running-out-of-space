@@ -52,14 +52,14 @@ impl Graphics {
         };
     }
 
-    pub fn draw_rect(&self, x: u32, y: u32, width: u32, height: u32) {
+    pub fn draw_rect(&self, x: f64, y: f64, width: u32, height: u32) {
         js! { @(no_return)
             const graphics = @{&self.js_reference};
             graphics.drawRect(@{x}, @{y}, @{width}, @{height});
         };
     }
 
-    pub fn draw_ellipse(&self, x: u32, y: u32, width: u32, height: u32) {
+    pub fn draw_ellipse(&self, x: f64, y: f64, width: u32, height: u32) {
         js! { @(no_return)
             const graphics = @{&self.js_reference};
             graphics.drawEllipse(@{x}, @{y}, @{width}, @{height});

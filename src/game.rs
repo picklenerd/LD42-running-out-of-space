@@ -10,8 +10,9 @@ use systems::controls::ControlSystem;
 use systems::enemy::EnemySystem;
 use systems::player::PlayerSystem;
 use systems::damage::DamageSystem;
-
+use systems::projectile::ProjectileSystem;
 use pixi::application::Application;
+use components::{Collider, Position, Wall};
 
 pub struct Game {
     state: GameState,
@@ -33,10 +34,29 @@ impl GameState {
         let app = Application::new(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, constants::BACKGROUND_COLOR);
         body.append_child(&app.view());
 
-        Self {
-            app,
-            ecs: Ecs::new(),
-        }
+        let mut ecs = Ecs::new();
+
+        let top_wall = ecs.create_entity();
+        let top_pos = Position{x: constants::SCREEN_WIDTH as f64 / 2.0, y: 0.0};
+        let _ = ecs.set(top_wall, Collider{position: top_pos, width: constants::SCREEN_WIDTH, height: 1});
+        let _ = ecs.set(top_wall, Wall);
+        
+        let bottom_wall = ecs.create_entity();
+        let bottom_pos = Position{x: constants::SCREEN_WIDTH as f64 / 2.0, y: constants::SCREEN_HEIGHT as f64};
+        let _ = ecs.set(bottom_wall, Collider{position: bottom_pos, width: constants::SCREEN_WIDTH, height: 1});
+        let _ = ecs.set(bottom_wall, Wall);
+
+        let left_wall = ecs.create_entity();
+        let left_pos = Position{x: 0.0, y: constants::SCREEN_HEIGHT as f64 / 2.0};
+        let _ = ecs.set(left_wall, Collider{position: left_pos, width: 1, height: constants::SCREEN_HEIGHT});
+        let _ = ecs.set(left_wall, Wall);
+
+        let right_wall = ecs.create_entity();
+        let right_pos = Position{x: constants::SCREEN_WIDTH as f64, y: constants::SCREEN_HEIGHT as f64 / 2.0};
+        let _ = ecs.set(right_wall, Collider{position: right_pos, width: 1, height: constants::SCREEN_HEIGHT});
+        let _ = ecs.set(right_wall, Wall);
+
+        Self { app, ecs }
     }
 
     pub fn app(&mut self) -> &mut Application {
@@ -57,6 +77,7 @@ impl Game {
         systems.push(Box::new(PlayerSystem));
         systems.push(Box::new(EnemySystem::new()));
         systems.push(Box::new(DamageSystem));
+        systems.push(Box::new(ProjectileSystem));
 
         Self {
             state: GameState::new(),

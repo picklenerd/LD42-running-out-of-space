@@ -40,15 +40,15 @@ impl System for ControlSystem {
         if !self.wait_for_reset && self.input.is_control_active("shoot") {
             self.wait_for_reset = true;
 
-            let circle = Graphics::new();
-            circle.begin_fill(constants::PROJECTILE_COLOR);
-            circle.draw_ellipse(0, 0, constants::PROJECTILE_SIZE, constants::PROJECTILE_SIZE);
-            state.app().add_child(&circle);
-
             let mut ids: Vec<EntityId> = Vec::new();
             let filter = component_filter!(Player, Position);
             state.ecs().collect_with(&filter, &mut ids);
             let start_pos = state.ecs().get::<Position>(ids[0]).unwrap();
+
+            let circle = Graphics::new();
+            circle.begin_fill(constants::PROJECTILE_COLOR);
+            circle.draw_ellipse(0.0, 0.0, constants::PROJECTILE_SIZE, constants::PROJECTILE_SIZE);
+            state.app().add_child(&circle);
 
             let mouse_pos = self.input.mouse_position();
 

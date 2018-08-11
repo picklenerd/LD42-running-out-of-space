@@ -10,7 +10,7 @@ impl System for PlayerSystem {
     fn init(&mut self, state: &mut GameState) {
         let player_circle = Graphics::new();
         player_circle.begin_fill(constants::PLAYER_COLOR);
-        player_circle.draw_ellipse(0, 0, constants::PLAYER_SIZE, constants::PLAYER_SIZE);
+        player_circle.draw_ellipse(0.0, 0.0, constants::PLAYER_SIZE, constants::PLAYER_SIZE);
         state.app().add_child(&player_circle);
 
         let start_pos = Position{x: constants::PLAYER_START_X, y: constants::PLAYER_START_Y};
