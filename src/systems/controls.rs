@@ -29,10 +29,8 @@ impl ControlSystem {
             wait_for_reset: false,
         }
     }
-}
 
-impl System for ControlSystem {
-    fn run(&mut self, state: &mut GameState, _delta: f64) {
+    fn handle_shooting(&mut self, state: &mut GameState) {
         if self.wait_for_reset && !self.input.is_control_active("shoot") {
             self.wait_for_reset = false;
         }
@@ -61,7 +59,9 @@ impl System for ControlSystem {
             let _ = state.ecs().set(projectile, Renderer{graphics: circle});
             let _ = state.ecs().set(projectile, Collider{position: start_pos, width: constants::PLAYER_SIZE, height: constants::PLAYER_SIZE});
         }
+    }
 
+    fn handle_movement(&mut self, state: &mut GameState) {
         let mut ids: Vec<EntityId> = Vec::new();
         let filter = component_filter!(KeyboardControls, Velocity);
         state.ecs().collect_with(&filter, &mut ids);
@@ -90,5 +90,12 @@ impl System for ControlSystem {
 
             let _ = state.ecs().set(id, Velocity{x: angle.cos() * constants::PLAYER_SPEED, y: angle.sin() * constants::PLAYER_SPEED});
         }
+    }
+}
+
+impl System for ControlSystem {
+    fn run(&mut self, state: &mut GameState, _delta: f64) {
+        self.handle_shooting(state);
+        self.handle_movement(state);
     }
 }
