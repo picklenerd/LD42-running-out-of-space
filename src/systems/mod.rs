@@ -1,9 +1,12 @@
 pub mod movement;
 pub mod rendering;
 pub mod controls;
+pub mod player;
+pub mod enemy;
 
-use recs::Ecs;
+use game::GameState;
 
 pub trait System {
-    fn run(&mut self, ecs: &mut Ecs, delta: f64);
+    fn init(&mut self, state: &mut GameState) {}
+    fn run(&mut self, state: &mut GameState, delta: f64);
 }

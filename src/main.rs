@@ -19,7 +19,8 @@ use stdweb::web::window;
 use ::game::Game;
 
 fn main() {
-    let game = Game::new();
+    let mut game = Game::new();
+    game.init();
     window().request_animation_frame(move |delta| update(game, delta));
 }
 

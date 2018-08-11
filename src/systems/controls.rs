@@ -3,7 +3,8 @@ use std::f64::consts;
 use super::System;
 use components::{Velocity, KeyboardControls};
 use keyboard::Keyboard;
-use recs::{Ecs, EntityId};
+use recs::EntityId;
+use game::GameState;
 
 pub struct ControlSystem {
     keyboard: Keyboard,
@@ -22,15 +23,15 @@ impl ControlSystem {
 }
 
 impl System for ControlSystem {
-    fn run(&mut self, ecs: &mut Ecs, _delta: f64) {
+    fn run(&mut self, state: &mut GameState, _delta: f64) {
         let player_speed: f64 = 5.0;
         let deceleration: f64 = 2.0;
 
         let mut ids: Vec<EntityId> = Vec::new();
         let filter = component_filter!(KeyboardControls, Velocity);
-        ecs.collect_with(&filter, &mut ids);
+        state.ecs().collect_with(&filter, &mut ids);
         for id in ids {
-            let current = ecs.get::<Velocity>(id).unwrap();
+            let current = state.ecs().get::<Velocity>(id).unwrap();
             let mut new_x = current.x;
             let mut new_y = current.y;
 
@@ -68,7 +69,7 @@ impl System for ControlSystem {
                 new_y /= consts::SQRT_2;
             }
 
-            let _ = ecs.set(id, Velocity{x: new_x, y: new_y});
+            let _ = state.ecs().set(id, Velocity{x: new_x, y: new_y});
         }
     }
 }
