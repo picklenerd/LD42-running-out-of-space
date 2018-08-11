@@ -72,11 +72,13 @@ impl EnemySystem {
         let x_diff = player_position.x - pos.x;
         let y_diff = player_position.y - pos.y;
 
-        let new_x = x_diff.abs().min(constants::ENEMY_SPEED.abs());
-        let new_y = y_diff.abs().min(constants::ENEMY_SPEED.abs());
+        let angle = y_diff.atan2(x_diff);
 
-        let x_vel = new_x * x_diff.signum();
-        let y_vel = new_y * y_diff.signum();
+        let x_dir = angle.cos();
+        let y_dir = angle.sin();
+
+        let x_vel = constants::ENEMY_SPEED * x_dir;
+        let y_vel = constants::ENEMY_SPEED * y_dir;
 
         let _ = state.ecs().set(enemy_id, Velocity{x: x_vel, y: y_vel});
     }

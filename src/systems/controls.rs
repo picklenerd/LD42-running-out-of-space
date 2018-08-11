@@ -29,45 +29,29 @@ impl System for ControlSystem {
         let filter = component_filter!(KeyboardControls, Velocity);
         state.ecs().collect_with(&filter, &mut ids);
         for id in ids {
-            let current = state.ecs().get::<Velocity>(id).unwrap();
-            let mut new_x = current.x;
-            let mut new_y = current.y;
+            let mut x_dir: f64 = 0.0;
+            let mut y_dir: f64 = 0.0;
 
-            let mut x_down = false;
-            let mut y_down = false;
-            
             if self.keyboard.key_down("left") {
-                new_x = -constants::PLAYER_SPEED;
-                x_down = true;
+                x_dir = -1.0;
             } else if self.keyboard.key_down("right") {
-                new_x = constants::PLAYER_SPEED;
-                x_down = true;
-            } else {
-                if current.x != 0.0 { 
-                    let diff = current.x.abs().min(constants::PLAYER_DECELERATION.abs());
-                    new_x = current.x - (current.x.signum() * diff);
-                }
+                x_dir = 1.0;
             }
 
             if self.keyboard.key_down("up") {
-                new_y = -constants::PLAYER_SPEED;
-                y_down = true;
+                y_dir = -1.0;
             } else if self.keyboard.key_down("down") {
-                new_y = constants::PLAYER_SPEED;
-                y_down = true;
-            } else {
-                if current.y != 0.0 { 
-                    let diff = current.y.abs().min(constants::PLAYER_DECELERATION.abs());
-                    new_y = current.y - (current.y.signum() * diff);
-                }
+                y_dir = 1.0;
             }
 
-            if x_down && y_down {
-                new_x /= consts::SQRT_2;
-                new_y /= consts::SQRT_2;
+            if x_dir == 0.0 && y_dir == 0.0 {
+                let _ = state.ecs().set(id, Velocity{x: 0.0, y: 0.0});
+                return;
             }
 
-            let _ = state.ecs().set(id, Velocity{x: new_x, y: new_y});
+            let angle = y_dir.atan2(x_dir);
+
+            let _ = state.ecs().set(id, Velocity{x: angle.cos() * constants::PLAYER_SPEED, y: angle.sin() * constants::PLAYER_SPEED});
         }
     }
 }
