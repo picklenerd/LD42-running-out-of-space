@@ -50,6 +50,7 @@ name = "ld42"
 version = "0.1.0"
 dependencies = [
  "rand 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "recs 2.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "stdweb 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -106,6 +107,11 @@ dependencies = [
 [[package]]
 name = "rand_core"
 version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "recs"
+version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -229,6 +235,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum quote 0.6.5 (registry+https://github.com/rust-lang/crates.io-index)" = "3372dc35766b36a99ce2352bd1b6ea0137c38d215cc0c8780bf6de6df7842ba9"
 "checksum rand 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)" = "e464cd887e869cddcae8792a4ee31d23c7edd516700695608f5b98c67ee0131c"
 "checksum rand_core 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "edecf0f94da5551fc9b492093e30b041a891657db7940ee221f9d2f66e82eef2"
+"checksum recs 2.0.1 (registry+https://github.com/rust-lang/crates.io-index)" = "ae7fb921f1f7df72e9ee32716cc1c5104959077babe807005efee511e4f360da"
 "checksum serde 1.0.71 (registry+https://github.com/rust-lang/crates.io-index)" = "6dfad05c8854584e5f72fb859385ecdfa03af69c3fd0572f0da2d4c95f060bdb"
 "checksum serde_derive 1.0.71 (registry+https://github.com/rust-lang/crates.io-index)" = "b719c6d5e9f73fbc37892246d5852333f040caa617b8873c6aced84bcb28e7bb"
 "checksum serde_json 1.0.24 (registry+https://github.com/rust-lang/crates.io-index)" = "c3c6908c7b925cd6c590358a4034de93dbddb20c45e1d021931459fd419bf0e2"

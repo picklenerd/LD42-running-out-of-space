@@ -1,7 +1,7 @@
 use stdweb::{ Reference };
 use stdweb::unstable::{ TryInto };
 
-use super::{ JsRef, Position };
+use super::{ JsRef, Positionable };
 
 /*
  * Gonna learn me some macros (some day)
@@ -15,6 +15,7 @@ use super::{ JsRef, Position };
 //     };
 // }
 
+#[derive(Clone, PartialEq, Debug)]
 pub struct Graphics {
     pub js_reference: Reference,
 }
@@ -72,8 +73,8 @@ impl JsRef for Graphics {
     }
 }
 
-impl Position for Graphics {
-    fn get_x(&self) -> i32 {
+impl Positionable for Graphics {
+    fn get_x(&self) -> f64 {
         let x = js! { 
             const me = @{&self.js_reference};
             return me.x;
@@ -81,14 +82,14 @@ impl Position for Graphics {
         x.try_into().unwrap()
     }
 
-    fn set_x(&self, new_x: i32) {
+    fn set_x(&self, new_x: f64) {
         js! { @(no_return)
             const rect = @{&self.js_reference};
             rect.x = @{new_x};
         };
     }
 
-    fn get_y(&self) -> i32 {
+    fn get_y(&self) -> f64 {
         let y = js! { 
             const me = @{&self.js_reference};
             return me.y;
@@ -96,14 +97,14 @@ impl Position for Graphics {
         y.try_into().unwrap()
     }
 
-    fn set_y(&self, new_y: i32) {
+    fn set_y(&self, new_y: f64) {
         js! { @(no_return)
             const rect = @{&self.js_reference};
             rect.y = @{new_y};
         };
     }
 
-    fn set_position(&self, x: i32, y: i32) {
+    fn set_position(&self, x: f64, y: f64) {
         js! {@(no_return)
             const rect = @{&self.js_reference};
             rect.x = @{x};

@@ -5,4 +5,5 @@ authors = ["Jordan Grace <jordan.t.grace@gmail.com>"]
 
 [dependencies]
 stdweb = "0.4.8"
-rand = { version="0.5.5", features=["stdweb"] }
+rand = { version = "0.5.5", features = ["stdweb"] }
+recs = "2.0.1"

@@ -1,16 +1,20 @@
 #![recursion_limit="128"]
+#![feature(extern_prelude)]
 
 #[macro_use]
 extern crate stdweb;
+#[macro_use]
+extern crate recs;
 extern crate rand;
 
 pub mod pixi;
 pub mod keyboard;
-pub mod ecs;
+pub mod game;
+pub mod components;
 
 use stdweb::web::window;
 
-use ::ecs::game::Game;
+use ::game::Game;
 
 fn main() {
     let game = Game::new();
