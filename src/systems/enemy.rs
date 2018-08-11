@@ -5,7 +5,7 @@ use recs::EntityId;
 
 use constants;
 use systems::System;
-use components::{Position, Velocity, Renderer, Enemy, Player};
+use components::{Player, Enemy, Position, Velocity, Renderer, Collider};
 use pixi::graphics::Graphics;
 use game::GameState;
 
@@ -37,6 +37,7 @@ impl EnemySystem {
         let _ = state.ecs().set(enemy, Velocity{x: 0.0, y: 0.0});
         let _ = state.ecs().set(enemy, Enemy);
         let _ = state.ecs().set(enemy, Renderer{graphics: enemy_circle});
+        let _ = state.ecs().set(enemy, Collider{width: constants::ENEMY_SIZE, height: constants::ENEMY_SIZE});
         self.enemy_count += 1;
     }
 }
@@ -59,18 +60,24 @@ impl System for EnemySystem {
         let player_position = state.ecs().get::<Position>(player).unwrap();
 
         for enemy_id in enemy_ids {
-            let pos = state.ecs().get::<Position>(enemy_id).unwrap();
-
-            let x_diff = player_position.x - pos.x;
-            let y_diff = player_position.y - pos.y;
-
-            let new_x = x_diff.abs().min(constants::ENEMY_SPEED.abs());
-            let new_y = y_diff.abs().min(constants::ENEMY_SPEED.abs());
-
-            let x_vel = new_x * x_diff.signum();
-            let y_vel = new_y * y_diff.signum();
-
-            let _ = state.ecs().set(enemy_id, Velocity{x: x_vel, y: y_vel});
+            EnemySystem::chase_player(state, enemy_id, &player_position);
         }
+    }
+}
+
+impl EnemySystem {
+    pub fn chase_player(state: &mut GameState, enemy_id: EntityId, player_position: &Position) {
+        let pos = state.ecs().get::<Position>(enemy_id).unwrap();
+
+        let x_diff = player_position.x - pos.x;
+        let y_diff = player_position.y - pos.y;
+
+        let new_x = x_diff.abs().min(constants::ENEMY_SPEED.abs());
+        let new_y = y_diff.abs().min(constants::ENEMY_SPEED.abs());
+
+        let x_vel = new_x * x_diff.signum();
+        let y_vel = new_y * y_diff.signum();
+
+        let _ = state.ecs().set(enemy_id, Velocity{x: x_vel, y: y_vel});
     }
 }

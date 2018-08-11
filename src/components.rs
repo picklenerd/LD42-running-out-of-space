@@ -20,3 +20,6 @@ pub struct Player;
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct Enemy;
+
+#[derive(Clone, PartialEq, Debug)]
+pub struct Collider{pub width: u32, pub height: u32}

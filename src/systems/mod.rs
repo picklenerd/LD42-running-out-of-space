@@ -3,6 +3,7 @@ pub mod rendering;
 pub mod controls;
 pub mod player;
 pub mod enemy;
+pub mod collision;
 
 use game::GameState;
 
