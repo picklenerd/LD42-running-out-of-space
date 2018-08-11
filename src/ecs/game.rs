@@ -3,6 +3,8 @@ use stdweb::web::{
     document,
     window,
 };
+use rand::Rng;
+use rand::rngs::OsRng;
 
 use pixi::application::Application;
 use pixi::graphics::Graphics;
@@ -16,7 +18,9 @@ pub struct Game {
     app: Application,
     keyboard: Keyboard,
     player: Graphics,
+    enemies: Vec<Graphics>,
     entities: Vec<Entity>,
+    rng: OsRng,
 }
 
 impl Game {
@@ -29,12 +33,14 @@ impl Game {
         let app = Application::new(800, 600, 0xCCCCCC);
         body.append_child(&app.view());
 
-        let circle = Graphics::new();
-        circle.line_width(1);
-        circle.line_color(0x000000);
-        circle.begin_fill(0x000000);
-        circle.draw_ellipse(100, 100, 10, 10);
-        app.add_child(&circle);
+        let player = Graphics::new();
+        player.begin_fill(0x000000);
+        player.draw_ellipse(100, 100, 10, 10);
+        app.add_child(&player);
+
+        let mut rng = OsRng::new().unwrap();
+
+        let mut enemies = Vec::new();
 
         let keyboard = Keyboard::new();
         keyboard.track_key("KeyW", "up");
@@ -46,8 +52,10 @@ impl Game {
             next_id: 0,
             app,
             keyboard,
-            player: circle,
+            player,
+            enemies,
             entities: Vec::new(),
+            rng,
         }
     }
 

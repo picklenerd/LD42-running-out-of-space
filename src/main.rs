@@ -2,6 +2,7 @@
 
 #[macro_use]
 extern crate stdweb;
+extern crate rand;
 
 pub mod pixi;
 pub mod keyboard;
