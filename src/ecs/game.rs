@@ -13,24 +13,14 @@ use super::entity::{ Entity };
 
 pub struct Game {
     next_id: u64,
+    app: Application,
+    keyboard: Keyboard,
+    player: Graphics,
     entities: Vec<Entity>,
 }
 
 impl Game {
     pub fn new() -> Self {
-        Self {
-            next_id: 0,
-            entities: Vec::new(),
-        }
-    }
-
-    pub fn create_entity(&mut self) -> u64 {
-        let id = self.next_id;
-        self.next_id += 1;
-        id
-    }
-
-    pub fn run(&mut self) {
         let body = document().body().unwrap();
         let div = document().create_element("div").unwrap();
         
@@ -52,26 +42,36 @@ impl Game {
         keyboard.track_key("KeyA", "left");
         keyboard.track_key("KeyD", "right");
 
-        fn animate(circle: Graphics, keyboard: Keyboard) {
-            if keyboard.key_down("up") {
-                circle.add_y(-2);
-            } else if keyboard.key_down("down") {
-                circle.add_y(2);
-            }
-
-            if keyboard.key_down("left") {
-                circle.add_x(-2);
-            } else if keyboard.key_down("right") {
-                circle.add_x(2);
-            }
-
-            window().request_animation_frame(|_| animate(circle, keyboard));
+        Self {
+            next_id: 0,
+            app,
+            keyboard,
+            player: circle,
+            entities: Vec::new(),
         }
-
-        window().request_animation_frame(|_| animate(circle, keyboard));
     }
 
-    fn update_positions(&mut self) {
+    pub fn create_entity(&mut self) -> u64 {
+        let id = self.next_id;
+        self.next_id += 1;
+        id
+    }
 
+    pub fn update(&mut self, delta: f64) {
+        self.update_positions(delta);
+    }
+
+    fn update_positions(&mut self, delta: f64) {
+        if self.keyboard.key_down("up") {
+            self.player.add_y(-2);
+        } else if self.keyboard.key_down("down") {
+            self.player.add_y(2);
+        }
+
+        if self.keyboard.key_down("left") {
+            self.player.add_x(-2);
+        } else if self.keyboard.key_down("right") {
+            self.player.add_x(2);
+        }
     }
 }
