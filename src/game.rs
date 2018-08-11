@@ -15,6 +15,9 @@ use pixi::graphics::Graphics;
 use pixi::Positionable;
 use keyboard::Keyboard;
 
+#[macro_use]
+use utils;
+
 pub struct Game {
     app: Application,
     keyboard: Keyboard,

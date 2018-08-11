@@ -1,12 +1,12 @@
 #![recursion_limit="128"]
-#![feature(extern_prelude)]
 
 #[macro_use]
 extern crate stdweb;
-#[macro_use]
 extern crate recs;
 extern crate rand;
 
+#[macro_use]
+pub mod utils;
 pub mod pixi;
 pub mod keyboard;
 pub mod game;
