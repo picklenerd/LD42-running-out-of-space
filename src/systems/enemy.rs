@@ -33,11 +33,11 @@ impl EnemySystem {
             x: self.rng.gen_range(0.0, constants::SCREEN_WIDTH as f64), 
             y: self.rng.gen_range(0.0, constants::SCREEN_HEIGHT as f64),
         };
-        let _ = state.ecs().set(enemy, start_pos);
+        let _ = state.ecs().set(enemy, start_pos.clone());
         let _ = state.ecs().set(enemy, Velocity{x: 0.0, y: 0.0});
         let _ = state.ecs().set(enemy, Enemy);
         let _ = state.ecs().set(enemy, Renderer{graphics: enemy_circle});
-        let _ = state.ecs().set(enemy, Collider{width: constants::ENEMY_SIZE, height: constants::ENEMY_SIZE});
+        let _ = state.ecs().set(enemy, Collider{position: start_pos, width: constants::ENEMY_SIZE, height: constants::ENEMY_SIZE});
         self.enemy_count += 1;
     }
 }

@@ -13,13 +13,15 @@ impl System for PlayerSystem {
         player_circle.draw_ellipse(0, 0, constants::PLAYER_SIZE, constants::PLAYER_SIZE);
         state.app().add_child(&player_circle);
 
+        let start_pos = Position{x: constants::PLAYER_START_X, y: constants::PLAYER_START_Y};
+
         let player = state.ecs().create_entity();
         let _ = state.ecs().set(player, Player);
-        let _ = state.ecs().set(player, Position{x: constants::PLAYER_START_X, y: constants::PLAYER_START_Y});
+        let _ = state.ecs().set(player, start_pos.clone());
         let _ = state.ecs().set(player, Velocity{x: 0.0, y: 0.0});
         let _ = state.ecs().set(player, Renderer{graphics: player_circle});
         let _ = state.ecs().set(player, KeyboardControls);
-        let _ = state.ecs().set(player, Collider{width: constants::PLAYER_SIZE, height: constants::PLAYER_SIZE});
+        let _ = state.ecs().set(player, Collider{position: start_pos, width: constants::PLAYER_SIZE, height: constants::PLAYER_SIZE});
     }
     
     fn run(&mut self, _game: &mut GameState, _delta: f64) {

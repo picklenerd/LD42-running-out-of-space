@@ -9,7 +9,7 @@ use systems::rendering::RenderingSystem;
 use systems::controls::ControlSystem;
 use systems::enemy::EnemySystem;
 use systems::player::PlayerSystem;
-use systems::collision::CollisionSystem;
+use systems::damage::DamageSystem;
 
 use pixi::application::Application;
 
@@ -56,7 +56,7 @@ impl Game {
         systems.push(Box::new(ControlSystem::new()));
         systems.push(Box::new(PlayerSystem));
         systems.push(Box::new(EnemySystem::new()));
-        systems.push(Box::new(CollisionSystem));
+        systems.push(Box::new(DamageSystem));
 
         Self {
             state: GameState::new(),

@@ -22,4 +22,15 @@ pub struct Player;
 pub struct Enemy;
 
 #[derive(Clone, PartialEq, Debug)]
-pub struct Collider{pub width: u32, pub height: u32}
+pub struct Collider{pub position: Position, pub width: u32, pub height: u32}
+
+impl Collider {
+    pub fn set_pos(&mut self, position: &Position) {
+        self.position = position.clone();
+    }
+
+    pub fn is_colliding(&self, other: &Collider) -> bool {
+        (self.position.x - other.position.x).abs() <= ((self.width as f64 / 2.0) + (other.width as f64 / 2.0)) &&
+        (self.position.y - other.position.y).abs() <= ((self.height as f64 / 2.0) + (other.height as f64 / 2.0))
+    }
+}
