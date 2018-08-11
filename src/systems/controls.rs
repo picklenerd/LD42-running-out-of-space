@@ -7,6 +7,7 @@ use constants;
 
 pub struct ControlSystem {
     input: Input,
+    wait_for_reset: bool,
 }
 
 impl ControlSystem {
@@ -22,13 +23,21 @@ impl ControlSystem {
         // Mouse controls
         input.track_mouse("0", "shoot");
 
-        Self { input }
+        Self { 
+            input,
+            wait_for_reset: false,
+        }
     }
 }
 
 impl System for ControlSystem {
     fn run(&mut self, state: &mut GameState, _delta: f64) {
-        if self.input.is_control_active("shoot") {
+        if self.wait_for_reset && !self.input.is_control_active("shoot") {
+            self.wait_for_reset = false;
+        }
+        
+        if !self.wait_for_reset && self.input.is_control_active("shoot") {
+            self.wait_for_reset = true;
             console!(log, self.input.mouse_position().0);
             console!(log, self.input.mouse_position().1);
         }
