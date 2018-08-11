@@ -5,6 +5,7 @@ use components::{Velocity, KeyboardControls};
 use keyboard::Keyboard;
 use recs::EntityId;
 use game::GameState;
+use constants;
 
 pub struct ControlSystem {
     keyboard: Keyboard,
@@ -24,9 +25,6 @@ impl ControlSystem {
 
 impl System for ControlSystem {
     fn run(&mut self, state: &mut GameState, _delta: f64) {
-        let player_speed: f64 = 5.0;
-        let deceleration: f64 = 2.0;
-
         let mut ids: Vec<EntityId> = Vec::new();
         let filter = component_filter!(KeyboardControls, Velocity);
         state.ecs().collect_with(&filter, &mut ids);
@@ -39,27 +37,27 @@ impl System for ControlSystem {
             let mut y_down = false;
             
             if self.keyboard.key_down("left") {
-                new_x = -player_speed;
+                new_x = -constants::PLAYER_SPEED;
                 x_down = true;
             } else if self.keyboard.key_down("right") {
-                new_x = player_speed;
+                new_x = constants::PLAYER_SPEED;
                 x_down = true;
             } else {
                 if current.x != 0.0 { 
-                    let diff = current.x.abs().min(deceleration.abs());
+                    let diff = current.x.abs().min(constants::PLAYER_DECELERATION.abs());
                     new_x = current.x - (current.x.signum() * diff);
                 }
             }
 
             if self.keyboard.key_down("up") {
-                new_y = -player_speed;
+                new_y = -constants::PLAYER_SPEED;
                 y_down = true;
             } else if self.keyboard.key_down("down") {
-                new_y = player_speed;
+                new_y = constants::PLAYER_SPEED;
                 y_down = true;
             } else {
                 if current.y != 0.0 { 
-                    let diff = current.y.abs().min(deceleration.abs());
+                    let diff = current.y.abs().min(constants::PLAYER_DECELERATION.abs());
                     new_y = current.y - (current.y.signum() * diff);
                 }
             }
