@@ -1,30 +1,38 @@
-use std::f64::consts;
-
 use super::System;
 use components::{Velocity, KeyboardControls};
-use keyboard::Keyboard;
+use input::Input;
 use recs::EntityId;
 use game::GameState;
 use constants;
 
 pub struct ControlSystem {
-    keyboard: Keyboard,
+    input: Input,
 }
 
 impl ControlSystem {
     pub fn new() -> Self {
-        let keyboard = Keyboard::new();
-        keyboard.track_key("KeyW", "up");
-        keyboard.track_key("KeyS", "down");
-        keyboard.track_key("KeyA", "left");
-        keyboard.track_key("KeyD", "right");
+        let input = Input::new();
+        
+        // Keyboard controls
+        input.track_key("KeyW", "up");
+        input.track_key("KeyS", "down");
+        input.track_key("KeyA", "left");
+        input.track_key("KeyD", "right");
 
-        Self { keyboard }
+        // Mouse controls
+        input.track_mouse("0", "shoot");
+
+        Self { input }
     }
 }
 
 impl System for ControlSystem {
     fn run(&mut self, state: &mut GameState, _delta: f64) {
+        if self.input.is_control_active("shoot") {
+            console!(log, self.input.mouse_position().0);
+            console!(log, self.input.mouse_position().1);
+        }
+
         let mut ids: Vec<EntityId> = Vec::new();
         let filter = component_filter!(KeyboardControls, Velocity);
         state.ecs().collect_with(&filter, &mut ids);
@@ -32,15 +40,15 @@ impl System for ControlSystem {
             let mut x_dir: f64 = 0.0;
             let mut y_dir: f64 = 0.0;
 
-            if self.keyboard.key_down("left") {
+            if self.input.is_control_active("left") {
                 x_dir = -1.0;
-            } else if self.keyboard.key_down("right") {
+            } else if self.input.is_control_active("right") {
                 x_dir = 1.0;
             }
 
-            if self.keyboard.key_down("up") {
+            if self.input.is_control_active("up") {
                 y_dir = -1.0;
-            } else if self.keyboard.key_down("down") {
+            } else if self.input.is_control_active("down") {
                 y_dir = 1.0;
             }
 

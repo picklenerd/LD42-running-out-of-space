@@ -9,7 +9,7 @@ extern crate rand;
 pub mod utils;
 pub mod constants;
 pub mod pixi;
-pub mod keyboard;
+pub mod input;
 pub mod game;
 pub mod components;
 pub mod systems;
