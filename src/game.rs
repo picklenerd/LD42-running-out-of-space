@@ -1,5 +1,7 @@
 use stdweb::traits::*;
 use stdweb::web::document;
+
+use constants;
 use recs::Ecs;
 use components::{Position, Velocity, Renderer, KeyboardControls};
 use systems::System;
@@ -23,12 +25,12 @@ impl Game {
         
         body.append_child(&div);
 
-        let app = Application::new(800, 600, 0xCCCCCC);
+        let app = Application::new(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, constants::BACKGROUND_COLOR);
         body.append_child(&app.view());
 
         let player_circle = Graphics::new();
-        player_circle.begin_fill(0x000000);
-        player_circle.draw_ellipse(100, 100, 10, 10);
+        player_circle.begin_fill(constants::PLAYER_COLOR);
+        player_circle.draw_ellipse(0, 0, constants::PLAYER_SIZE, constants::PLAYER_SIZE);
         app.add_child(&player_circle);
 
         let mut ecs = Ecs::new();
@@ -38,7 +40,7 @@ impl Game {
         systems.push(Box::new(ControlSystem::new()));
 
         let player = ecs.create_entity();
-        let _ = ecs.set(player, Position{x: 200.0, y: 150.0});
+        let _ = ecs.set(player, Position{x: constants::PLAYER_START_X, y: constants::PLAYER_START_Y});
         let _ = ecs.set(player, Velocity{x: 0.0, y: 0.0});
         let _ = ecs.set(player, Renderer{graphics: player_circle});
         let _ = ecs.set(player, KeyboardControls{});

@@ -7,6 +7,7 @@ extern crate rand;
 
 #[macro_use]
 pub mod utils;
+pub mod constants;
 pub mod pixi;
 pub mod keyboard;
 pub mod game;
