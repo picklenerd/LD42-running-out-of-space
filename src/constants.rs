@@ -12,3 +12,7 @@ pub const PLAYER_DECELERATION: f64 = 2.0;
 pub const ENEMY_COLOR: u32 = 0xFF0000;
 pub const ENEMY_SIZE: u32 = 20;
 pub const ENEMY_SPEED: f64 = 2.0;
+
+pub const PROJECTILE_COLOR: u32 = 0x00AAFF;
+pub const PROJECTILE_SIZE: u32 = 6;
+pub const PROJECTILE_SPEED: f64 = 10.0;

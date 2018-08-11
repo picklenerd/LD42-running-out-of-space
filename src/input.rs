@@ -1,7 +1,8 @@
 use stdweb::{ Reference };
 use stdweb::unstable::{ TryInto };
 
-use ::pixi::JsRef;
+use pixi::JsRef;
+use components::Position;
 
 pub struct Input {
     pub js_reference: Reference,
@@ -41,14 +42,14 @@ impl Input {
         };
     }
 
-    pub fn mouse_position(&self) -> (f64, f64) {
+    pub fn mouse_position(&self) -> Position {
         let pos = js! {
             const input = @{&self.js_reference};
             return input.mousePosition;
         };
 
         let pos_vec: Vec<f64> = pos.try_into().unwrap();
-        (pos_vec[0], pos_vec[1])
+        Position{x: pos_vec[0], y: pos_vec[1]}
     }
 }
 

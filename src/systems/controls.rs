@@ -1,9 +1,10 @@
 use super::System;
-use components::{Velocity, KeyboardControls};
+use components::{Velocity, Position, KeyboardControls, Projectile, Player, Renderer, Collider};
 use input::Input;
 use recs::EntityId;
 use game::GameState;
 use constants;
+use pixi::graphics::Graphics;
 
 pub struct ControlSystem {
     input: Input,
@@ -38,8 +39,27 @@ impl System for ControlSystem {
         
         if !self.wait_for_reset && self.input.is_control_active("shoot") {
             self.wait_for_reset = true;
-            console!(log, self.input.mouse_position().0);
-            console!(log, self.input.mouse_position().1);
+
+            let circle = Graphics::new();
+            circle.begin_fill(constants::PROJECTILE_COLOR);
+            circle.draw_ellipse(0, 0, constants::PROJECTILE_SIZE, constants::PROJECTILE_SIZE);
+            state.app().add_child(&circle);
+
+            let mut ids: Vec<EntityId> = Vec::new();
+            let filter = component_filter!(Player, Position);
+            state.ecs().collect_with(&filter, &mut ids);
+            let start_pos = state.ecs().get::<Position>(ids[0]).unwrap();
+
+            let mouse_pos = self.input.mouse_position();
+
+            let (x_vel, y_vel) = start_pos.vector_to(&mouse_pos);
+
+            let projectile = state.ecs().create_entity();
+            let _ = state.ecs().set(projectile, Projectile);
+            let _ = state.ecs().set(projectile, start_pos.clone());
+            let _ = state.ecs().set(projectile, Velocity{x: x_vel * constants::PROJECTILE_SPEED, y: y_vel * constants::PROJECTILE_SPEED});
+            let _ = state.ecs().set(projectile, Renderer{graphics: circle});
+            let _ = state.ecs().set(projectile, Collider{position: start_pos, width: constants::PLAYER_SIZE, height: constants::PLAYER_SIZE});
         }
 
         let mut ids: Vec<EntityId> = Vec::new();

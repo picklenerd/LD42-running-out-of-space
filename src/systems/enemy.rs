@@ -69,13 +69,7 @@ impl EnemySystem {
     pub fn chase_player(state: &mut GameState, enemy_id: EntityId, player_position: &Position) {
         let pos = state.ecs().get::<Position>(enemy_id).unwrap();
 
-        let x_diff = player_position.x - pos.x;
-        let y_diff = player_position.y - pos.y;
-
-        let angle = y_diff.atan2(x_diff);
-
-        let x_dir = angle.cos();
-        let y_dir = angle.sin();
+        let (x_dir, y_dir) = pos.vector_to(&player_position);
 
         let x_vel = constants::ENEMY_SPEED * x_dir;
         let y_vel = constants::ENEMY_SPEED * y_dir;
