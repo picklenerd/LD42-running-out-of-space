@@ -1,5 +1,3 @@
-
-
 pub struct Loader {
     paths: Vec<(String, String)>,
 }

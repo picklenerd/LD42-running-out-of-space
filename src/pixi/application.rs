@@ -4,7 +4,6 @@ use stdweb::web::{
     HtmlElement,
 };
 
-use super::graphics::Graphics;
 use super::{ JsRef };
 
 pub struct Application {

@@ -11,6 +11,7 @@ pub mod pixi;
 pub mod keyboard;
 pub mod game;
 pub mod components;
+pub mod systems;
 
 use stdweb::web::window;
 
