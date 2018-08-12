@@ -14,20 +14,23 @@ use constants;
 pub struct ProjectileSystem;
 
 impl ProjectileSystem {
-    fn splat(&self, state: &mut GameState, projectile: EntityId) {
+    fn splat(&self, state: &mut GameState, projectile: EntityId, turn_into_ice: bool) {
         let renderer = state.ecs().get::<Renderer>(projectile).unwrap();
         state.pixi().remove_child(&renderer.graphics);
 
-        let position = state.ecs().get::<Position>(projectile).unwrap();
+        if turn_into_ice {
+            let position = state.ecs().get::<Position>(projectile).unwrap();
 
-        let circle = Graphics::new();
-        circle.begin_fill(constants::ICE_BLOCK_COLOR);
-        circle.draw_ellipse(position.x as f64, position.y as f64, constants::ICE_BLOCK_SIZE, constants::ICE_BLOCK_SIZE);
-        state.pixi().add_child_at(&circle, 0);
-        
-        let ice = state.ecs().create_entity();
-        let _ = state.ecs().set(ice, IceBlock);
-        let _ = state.ecs().set(ice, Collider{position, radius: constants::ICE_BLOCK_SIZE});
+            let circle = Graphics::new();
+            circle.begin_fill(constants::ICE_BLOCK_COLOR);
+            circle.draw_ellipse(position.x as f64, position.y as f64, constants::ICE_BLOCK_SIZE, constants::ICE_BLOCK_SIZE);
+            state.pixi().add_child_at(&circle, 0);
+            
+            let ice = state.ecs().create_entity();
+            let _ = state.ecs().set(ice, IceBlock);
+            let _ = state.ecs().set(ice, Collider{position, radius: constants::ICE_BLOCK_SIZE});
+
+        }
 
         let _ = state.ecs().destroy_entity(projectile);
     }
@@ -48,7 +51,7 @@ impl System for ProjectileSystem {
         for projectile in projectile_ids {
             let position = state.ecs().get::<Position>(projectile).unwrap();
             if position.x <= 0.0 || position.x >= constants::SCREEN_WIDTH as f64 || position.y <= 0.0 || position.y >= constants::SCREEN_HEIGHT as f64 {
-                self.splat(state, projectile);
+                self.splat(state, projectile, true);
                 continue;
             }
 
@@ -64,7 +67,7 @@ impl System for ProjectileSystem {
                                 }
                             }
                         }
-                        self.splat(state, projectile);
+                        self.splat(state, projectile, true);
                         break;
                     }
                 }
