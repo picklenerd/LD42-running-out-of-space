@@ -1,7 +1,7 @@
 use super::System;
 use game::GameState;
 use components::movement::{Position, Velocity};
-use components::colliders::SquareCollider;
+use components::colliders::Collider;
 use utils::clamp;
 use constants;
 
@@ -23,7 +23,7 @@ impl System for MovementSystem {
             };
             let _ = state.ecs().set(id, new_pos.clone());
 
-            if let Ok(mut coll) = state.ecs().borrow_mut::<SquareCollider>(id) {
+            if let Ok(mut coll) = state.ecs().borrow_mut::<Collider>(id) {
                 coll.set_pos(&new_pos);
             }
         }

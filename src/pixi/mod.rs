@@ -8,8 +8,6 @@ use stdweb::web::{
     HtmlElement,
 };
 
-use self::graphics::Graphics;
-
 pub trait JsRef {
     fn get_ref(&self) -> &Reference;
 }

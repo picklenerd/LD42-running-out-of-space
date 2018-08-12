@@ -3,7 +3,7 @@ use recs::EntityId;
 use pixi::graphics::Graphics;
 use systems::System;
 use game::GameState;
-use components::colliders::SquareCollider;
+use components::colliders::Collider;
 use components::movement::Position;
 use components::graphics::Renderer;
 use components::tags::{Projectile, IceBlock, Enemy};
@@ -25,7 +25,7 @@ impl ProjectileSystem {
         
         let ice = state.ecs().create_entity();
         let _ = state.ecs().set(ice, IceBlock);
-        let _ = state.ecs().set(ice, SquareCollider{position, width: constants::ICE_BLOCK_SIZE, height: constants::ICE_BLOCK_SIZE});
+        let _ = state.ecs().set(ice, Collider{position, radius: constants::ICE_BLOCK_SIZE / 2});
 
         let _ = state.ecs().destroy_entity(projectile);
     }
@@ -50,9 +50,9 @@ impl System for ProjectileSystem {
                 continue;
             }
 
-            let projectile_coll = state.ecs().get::<SquareCollider>(projectile).unwrap();
+            let projectile_coll = state.ecs().get::<Collider>(projectile).unwrap();
             for blocker in &blocker_ids {
-                if let Ok(bc) = state.ecs().get::<SquareCollider>(*blocker) {
+                if let Ok(bc) = state.ecs().get::<Collider>(*blocker) {
                     if bc.is_colliding(&projectile_coll) {
                         self.splat(state, projectile);
                         if let Ok(exists) = state.ecs().has::<Enemy>(*blocker) {

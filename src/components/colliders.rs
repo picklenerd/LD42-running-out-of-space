@@ -1,19 +1,18 @@
 use components::movement::Position;
 
 #[derive(Clone, PartialEq, Debug)]
-pub struct SquareCollider{pub position: Position, pub width: u32, pub height: u32}
+pub struct Collider{pub position: Position, pub radius: u32}
 
-impl SquareCollider {
+impl Collider {
     pub fn set_pos(&mut self, position: &Position) {
         self.position = position.clone();
     }
 
-    pub fn is_colliding(&self, other: &SquareCollider) -> bool {
-        (self.position.x - other.position.x).abs() <= ((self.width as f64 / 1.25) + (other.width as f64 / 1.25)) &&
-        (self.position.y - other.position.y).abs() <= ((self.height as f64 / 1.25) + (other.height as f64 / 1.25))
+    pub fn is_colliding(&self, other: &Collider) -> bool {
+        self.position.distance_to(&other.position) <= (self.radius + other.radius) as f64
     }
 
-    pub fn collision_direction(&self, other: &SquareCollider) -> (f64, f64) {
+    pub fn collision_direction(&self, other: &Collider) -> (f64, f64) {
         if !self.is_colliding(other) {
             (0.0, 0.0)
         } else {

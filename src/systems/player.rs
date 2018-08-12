@@ -6,7 +6,7 @@ use game::GameState;
 use components::movement::{Position, Velocity};
 use components::graphics::Renderer;
 use components::tags::{Player, KeyboardControls, IceBlock};
-use components::colliders::SquareCollider;
+use components::colliders::Collider;
 use pixi::graphics::Graphics;
 
 pub struct PlayerSystem;
@@ -26,7 +26,7 @@ impl System for PlayerSystem {
         let _ = state.ecs().set(player, Velocity{x: 0.0, y: 0.0});
         let _ = state.ecs().set(player, Renderer{graphics: player_circle});
         let _ = state.ecs().set(player, KeyboardControls);
-        let _ = state.ecs().set(player, SquareCollider{position: start_pos, width: constants::PLAYER_SIZE, height: constants::PLAYER_SIZE});
+        let _ = state.ecs().set(player, Collider{position: start_pos, radius: constants::PLAYER_SIZE / 2});
     }
     
     fn run(&mut self, _state: &mut GameState, _delta: f64) {

@@ -5,6 +5,13 @@ pub struct Position{pub x: f64, pub y: f64}
 pub struct Velocity{pub x: f64, pub y: f64}
 
 impl Position {
+    pub fn distance_to(&self, other: &Position) -> f64 {
+        let x_diff = other.x - self.x;
+        let y_diff = other.y - self.y;
+
+        ((x_diff * x_diff) + (y_diff * y_diff)).sqrt()
+    }
+    
     pub fn vector_to(&self, other: &Position) -> (f64, f64) {
         let x_diff = other.x - self.x;
         let y_diff = other.y - self.y;
