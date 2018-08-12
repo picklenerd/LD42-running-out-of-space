@@ -16,6 +16,7 @@ pub const ENEMY_SPEED: f64 = 5.0;
 pub const ENEMY_SLOWED_MULTIPLIER: f64 = 0.5;
 pub const ENEMY_MIN_SPAWN_DISTANCE: f64 = 100.0;
 pub const ENEMY_HEALTH: i32 = 3;
+pub const ENEMY_SCORE: i32 = 1;
 
 pub const PROJECTILE_COLOR: u32 = 0x00AAFF;
 pub const PROJECTILE_SIZE: u32 = 10;

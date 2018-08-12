@@ -22,6 +22,7 @@ pub struct Game {
 pub struct GameState {
     pixi: Pixi,
     ecs: Ecs,
+    score: i32,
 }
 
 impl GameState {
@@ -37,6 +38,7 @@ impl GameState {
         Self { 
             pixi, 
             ecs: Ecs::new(),
+            score: 0,
         }
     }
 
@@ -46,6 +48,10 @@ impl GameState {
 
     pub fn ecs(&mut self) -> &mut Ecs {
         &mut self.ecs
+    }
+
+    pub fn add_score(&mut self, score: i32) {
+        self.score += score;
     }
 }
 

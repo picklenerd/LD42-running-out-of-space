@@ -1,5 +1,6 @@
 use recs::EntityId;
 
+use constants;
 use systems::System;
 use game::GameState;
 use components::tags::{Enemy, Player};
@@ -32,6 +33,7 @@ impl System for HealthSystem {
                     let renderer = state.ecs().get::<Renderer>(id).unwrap();
                     state.pixi().remove_child(&renderer.graphics);
                     let _ = state.ecs().destroy_entity(id);
+                    state.add_score(constants::ENEMY_SCORE);
                     continue;
                 }
             }
