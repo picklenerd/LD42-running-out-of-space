@@ -1,3 +1,5 @@
+use stdweb::web::Date;
+
 use rand::Rng;
 use rand::rngs::OsRng;
 
@@ -15,12 +17,14 @@ use game::GameState;
 
 pub struct EnemySystem {
     rng: OsRng,
+    last_spawn_time: f64,
 }
 
 impl EnemySystem {
     pub fn new() -> Self {
         Self {
             rng: OsRng::new().unwrap(),
+            last_spawn_time: 0.0,
         }
     }
 
@@ -55,8 +59,10 @@ impl System for EnemySystem {
         let filter = component_filter!(Position, Velocity, Enemy);
         state.ecs().collect_with(&filter, &mut enemy_ids);
 
-        if enemy_ids.len() == 0 {
+        let now = Date::now();
+        if now - self.last_spawn_time >= constants::TIME_BETWEEN_SPAWNS && enemy_ids.len() < constants::MAX_ENEMIES as usize {
             self.spawn_enemy(state);
+            self.last_spawn_time = now;
         }
 
         let mut player_ids: Vec<EntityId> = Vec::new();
