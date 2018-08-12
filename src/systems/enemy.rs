@@ -35,7 +35,7 @@ impl EnemySystem {
         let _ = state.ecs().set(enemy, Velocity{x: 0.0, y: 0.0});
         let _ = state.ecs().set(enemy, Enemy);
         let _ = state.ecs().set(enemy, Renderer{graphics: enemy_circle});
-        let _ = state.ecs().set(enemy, Collider{position: start_pos, radius: constants::ENEMY_SIZE / 2});
+        let _ = state.ecs().set(enemy, Collider{position: start_pos, radius: constants::ENEMY_SIZE});
     }
 
     fn get_spawn_position(&mut self, state: &mut GameState) -> Position { 

@@ -25,7 +25,7 @@ impl ProjectileSystem {
         
         let ice = state.ecs().create_entity();
         let _ = state.ecs().set(ice, IceBlock);
-        let _ = state.ecs().set(ice, Collider{position, radius: constants::ICE_BLOCK_SIZE / 2});
+        let _ = state.ecs().set(ice, Collider{position, radius: constants::ICE_BLOCK_SIZE});
 
         let _ = state.ecs().destroy_entity(projectile);
     }

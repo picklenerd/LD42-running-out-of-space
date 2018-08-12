@@ -26,7 +26,7 @@ impl System for PlayerSystem {
         let _ = state.ecs().set(player, Velocity{x: 0.0, y: 0.0});
         let _ = state.ecs().set(player, Renderer{graphics: player_circle});
         let _ = state.ecs().set(player, KeyboardControls);
-        let _ = state.ecs().set(player, Collider{position: start_pos, radius: constants::PLAYER_SIZE / 2});
+        let _ = state.ecs().set(player, Collider{position: start_pos, radius: constants::PLAYER_SIZE});
     }
     
     fn run(&mut self, _state: &mut GameState, _delta: f64) {

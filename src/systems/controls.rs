@@ -60,7 +60,7 @@ impl ControlSystem {
             let _ = state.ecs().set(projectile, start_pos.clone());
             let _ = state.ecs().set(projectile, Velocity{x: x_vel * constants::PROJECTILE_SPEED, y: y_vel * constants::PROJECTILE_SPEED});
             let _ = state.ecs().set(projectile, Renderer{graphics: circle});
-            let _ = state.ecs().set(projectile, Collider{position: start_pos, radius: constants::PLAYER_SIZE / 2});
+            let _ = state.ecs().set(projectile, Collider{position: start_pos, radius: constants::PLAYER_SIZE});
         }
     }
 
