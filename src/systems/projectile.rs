@@ -1,4 +1,5 @@
 use recs::EntityId;
+use recs::NotFound;
 
 use pixi::graphics::Graphics;
 use systems::System;
@@ -7,6 +8,7 @@ use components::colliders::Collider;
 use components::movement::Position;
 use components::graphics::Renderer;
 use components::tags::{Projectile, IceBlock, Enemy};
+use components::damage::{Health, Damage};
 use constants;
 
 pub struct ProjectileSystem;
@@ -54,14 +56,15 @@ impl System for ProjectileSystem {
             for blocker in &blocker_ids {
                 if let Ok(bc) = state.ecs().get::<Collider>(*blocker) {
                     if bc.is_colliding(&projectile_coll) {
-                        self.splat(state, projectile);
                         if let Ok(exists) = state.ecs().has::<Enemy>(*blocker) {
                             if exists {
-                                let renderer = state.ecs().get::<Renderer>(*blocker).unwrap();
-                                state.pixi().remove_child(&renderer.graphics);
-                                let _ = state.ecs().destroy_entity(*blocker);
+                                if let Ok(damage) = state.ecs().get::<Damage>(projectile) {
+                                    let health = state.ecs().borrow_mut::<Health>(*blocker).unwrap();
+                                    health.amount -= damage.amount;
+                                }
                             }
                         }
+                        self.splat(state, projectile);
                         break;
                     }
                 }

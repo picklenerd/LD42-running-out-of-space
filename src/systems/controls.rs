@@ -3,6 +3,7 @@ use components::tags::{Projectile, Player, KeyboardControls};
 use components::movement::{Velocity, Position, Slowable};
 use components::graphics::Renderer;
 use components::colliders::Collider;
+use components::damage::Damage;
 use input::Input;
 use recs::EntityId;
 use game::GameState;
@@ -67,6 +68,7 @@ impl ControlSystem {
             let _ = state.ecs().set(projectile, Velocity{x: x_vel * constants::PROJECTILE_SPEED, y: y_vel * constants::PROJECTILE_SPEED});
             let _ = state.ecs().set(projectile, Renderer{graphics: circle});
             let _ = state.ecs().set(projectile, Collider{position: start_pos, radius: constants::PLAYER_SIZE});
+            let _ = state.ecs().set(projectile, Damage{amount: constants::PROJECTILE_DAMAGE});
         }
     }
 

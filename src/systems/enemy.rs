@@ -9,6 +9,7 @@ use components::tags::{Player, Enemy};
 use components::movement::{Position, Velocity, Slowable};
 use components::colliders::Collider;
 use components::graphics::Renderer;
+use components::damage::Health;
 use pixi::graphics::Graphics;
 use game::GameState;
 
@@ -34,6 +35,7 @@ impl EnemySystem {
         let _ = state.ecs().set(enemy, start_pos.clone());
         let _ = state.ecs().set(enemy, Velocity{x: 0.0, y: 0.0});
         let _ = state.ecs().set(enemy, Enemy);
+        let _ = state.ecs().set(enemy, Health{amount: constants::ENEMY_HEALTH});
         let _ = state.ecs().set(enemy, Renderer{graphics: enemy_circle});
         let _ = state.ecs().set(enemy, Collider{position: start_pos, radius: constants::ENEMY_SIZE});
         let _ = state.ecs().set(enemy, Slowable::new(constants::ENEMY_SLOWED_MULTIPLIER));

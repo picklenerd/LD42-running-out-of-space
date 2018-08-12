@@ -9,7 +9,7 @@ use systems::rendering::RenderingSystem;
 use systems::controls::ControlSystem;
 use systems::enemy::EnemySystem;
 use systems::player::PlayerSystem;
-use systems::damage::DamageSystem;
+use systems::health::HealthSystem;
 use systems::projectile::ProjectileSystem;
 use systems::slow::SlowSystem;
 use pixi::Pixi;
@@ -58,7 +58,7 @@ impl Game {
         systems.push(Box::new(MovementSystem));
         systems.push(Box::new(EnemySystem::new()));
         systems.push(Box::new(ProjectileSystem));
-        systems.push(Box::new(DamageSystem));
+        systems.push(Box::new(HealthSystem));
         systems.push(Box::new(RenderingSystem));
 
         Self {
