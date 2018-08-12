@@ -1,5 +1,6 @@
 use stdweb::traits::*;
-use stdweb::web::document;
+use stdweb::web::{document, HtmlElement};
+use stdweb::unstable::TryInto;
 
 use constants;
 use recs::Ecs;
@@ -30,11 +31,12 @@ impl GameState {
     pub fn new() -> Self {
         let body = document().body().unwrap();
         let div = document().create_element("div").unwrap();
+        div.set_attribute("id", "game").unwrap();
         
         body.append_child(&div);
 
         let pixi = Pixi::new(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, constants::BACKGROUND_COLOR);
-        body.append_child(&pixi.view());
+        div.append_child(&pixi.view());
 
         Self { 
             pixi, 
@@ -90,8 +92,22 @@ impl Game {
             system.run(&mut self.state, delta);
         }
         if self.state.game_over {
-            console!(log, "GAME OVER!");
-            console!(log, format!("Score: {}", self.state.score));
+            Game::set_game_over_screen(self.state.score);
+        }
+    }
+
+    pub fn set_game_over_screen(score: i32) {
+        let body = document().body().unwrap();
+        if let Some(game_div) = document().get_element_by_id("game") {
+            body.remove_child(&game_div).unwrap();
+            
+            let game_over_text: HtmlElement = document().create_element("h1").unwrap().try_into().unwrap();
+            game_over_text.set_text_content("Game Over!");
+            body.append_child(&game_over_text);
+
+            let score_text: HtmlElement = document().create_element("h2").unwrap().try_into().unwrap();
+            score_text.set_text_content(&format!("Score: {}", score));
+            body.append_child(&score_text);
         }
     }
 }

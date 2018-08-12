@@ -1,3 +1,5 @@
+use stdweb::web::Date;
+
 use rand::Rng;
 use rand::rngs::OsRng;
 
@@ -15,12 +17,14 @@ use game::GameState;
 
 pub struct EnemySystem {
     rng: OsRng,
+    last_spawn_time: f64,
 }
 
 impl EnemySystem {
     pub fn new() -> Self {
         Self {
             rng: OsRng::new().unwrap(),
+            last_spawn_time: 0.0,
         }
     }
 
@@ -31,7 +35,7 @@ impl EnemySystem {
         state.pixi().add_child(&enemy_circle);
         
         let enemy = state.ecs().create_entity();
-        let start_pos = self.get_spawn_position(state);
+        let start_pos = self.get_spawn_position();
         let _ = state.ecs().set(enemy, start_pos.clone());
         let _ = state.ecs().set(enemy, Velocity{x: 0.0, y: 0.0});
         let _ = state.ecs().set(enemy, Enemy);
@@ -41,22 +45,11 @@ impl EnemySystem {
         let _ = state.ecs().set(enemy, Slowable::new(constants::ENEMY_SLOWED_MULTIPLIER));
     }
 
-    fn get_spawn_position(&mut self, state: &mut GameState) -> Position { 
-        let mut player_ids = Vec::new();
-        state.ecs().collect_with(&component_filter!(Player), &mut player_ids);
-        let pos = state.ecs().get::<Position>(player_ids[0]).unwrap();
-
-        let mut x = pos.x;
-        let mut y = pos.y;
-
-        while (x - pos.x).abs() < constants::ENEMY_MIN_SPAWN_DISTANCE {
-            x = self.rng.gen_range(0.0, constants::SCREEN_WIDTH as f64);
-        }
-        while (y - pos.y).abs() < constants::ENEMY_MIN_SPAWN_DISTANCE {
-            y = self.rng.gen_range(0.0, constants::SCREEN_HEIGHT as f64);
-        }
-        
-        Position{x, y}
+    fn get_spawn_position(&mut self) -> Position { 
+        let x: i32 = self.rng.gen_range(0, 2) * constants::SCREEN_WIDTH as i32;
+        let y: i32 = self.rng.gen_range(0, 2) * constants::SCREEN_HEIGHT as i32;
+      
+        Position{x: x as f64, y: y as f64}
     }
 }
 
@@ -66,8 +59,10 @@ impl System for EnemySystem {
         let filter = component_filter!(Position, Velocity, Enemy);
         state.ecs().collect_with(&filter, &mut enemy_ids);
 
-        if enemy_ids.len() == 0 {
+        let now = Date::now();
+        if now - self.last_spawn_time >= constants::TIME_BETWEEN_SPAWNS && enemy_ids.len() < constants::MAX_ENEMIES as usize {
             self.spawn_enemy(state);
+            self.last_spawn_time = now;
         }
 
         let mut player_ids: Vec<EntityId> = Vec::new();
