@@ -1,5 +1,4 @@
 use recs::EntityId;
-use recs::NotFound;
 
 use pixi::graphics::Graphics;
 use systems::System;
@@ -59,7 +58,7 @@ impl System for ProjectileSystem {
             for blocker in &blocker_ids {
                 if let Ok(bc) = state.ecs().get::<Collider>(*blocker) {
                     if bc.is_colliding(&projectile_coll) {
-                        if let Ok(exists) = state.ecs().has::<Enemy>(*blocker) {
+                            if let Ok(exists) = state.ecs().has::<Enemy>(*blocker) {
                             if exists {
                                 if let Ok(damage) = state.ecs().get::<Damage>(projectile) {
                                     let health = state.ecs().borrow_mut::<Health>(*blocker).unwrap();
