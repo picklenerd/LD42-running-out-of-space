@@ -69,6 +69,10 @@ impl ControlSystem {
             let _ = state.ecs().set(projectile, Renderer{graphics: circle});
             let _ = state.ecs().set(projectile, Collider{position: start_pos, radius: constants::PLAYER_SIZE});
             let _ = state.ecs().set(projectile, Damage{amount: constants::PROJECTILE_DAMAGE});
+
+            js! { @(no_return)
+                shootSound.play();
+            }
         }
     }
 

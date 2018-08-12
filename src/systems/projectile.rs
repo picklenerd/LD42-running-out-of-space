@@ -63,6 +63,9 @@ impl System for ProjectileSystem {
                                 if let Ok(damage) = state.ecs().get::<Damage>(projectile) {
                                     let health = state.ecs().borrow_mut::<Health>(*blocker).unwrap();
                                     health.amount -= damage.amount;
+                                    js! { @(no_return)
+                                        hitSound.play();
+                                    }
                                 }
                             }
                         }
