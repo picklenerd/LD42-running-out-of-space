@@ -19,3 +19,5 @@ pub const PROJECTILE_SPEED: f64 = 10.0;
 
 pub const ICE_BLOCK_COLOR: u32 = 0x00AAFF;
 pub const ICE_BLOCK_SIZE: u32 = 30;
+
+pub const BOUNCE_SPEED: f64 = PLAYER_SPEED;

@@ -1,9 +1,11 @@
+use recs::EntityId;
+
 use constants;
 use systems::System;
 use game::GameState;
 use components::movement::{Position, Velocity};
 use components::graphics::Renderer;
-use components::tags::{Player, KeyboardControls} ;
+use components::tags::{Player, KeyboardControls, Wall, Enemy, IceBlock};
 use components::colliders::SquareCollider;
 use pixi::graphics::Graphics;
 
@@ -27,6 +29,25 @@ impl System for PlayerSystem {
         let _ = state.ecs().set(player, SquareCollider{position: start_pos, width: constants::PLAYER_SIZE, height: constants::PLAYER_SIZE});
     }
     
-    fn run(&mut self, _game: &mut GameState, _delta: f64) {
+    fn run(&mut self, state: &mut GameState, _delta: f64) {
+        let mut player_ids = Vec::new();
+        state.ecs().collect_with(&component_filter!(Player), &mut player_ids);
+        let player = player_ids[0];
+        
+        let mut blocker_ids: Vec<EntityId> = Vec::new();
+        state.ecs().collect_with(&component_filter!(Wall, SquareCollider), &mut blocker_ids);
+        let mut ice_ids: Vec<EntityId> = Vec::new();
+        state.ecs().collect_with(&component_filter!(IceBlock, SquareCollider), &mut ice_ids);
+
+        blocker_ids.append(&mut ice_ids);
+
+        let player_coll = state.ecs().get::<SquareCollider>(player).unwrap();
+        for blocker in &blocker_ids {
+            let blocker_coll = state.ecs().get::<SquareCollider>(*blocker).unwrap();
+            let (x_dir, y_dir) = blocker_coll.collision_direction(&player_coll);
+            if (x_dir, y_dir) != (0.0, 0.0) {
+                let _ = state.ecs().set(player, Velocity{x: -x_dir * constants::BOUNCE_SPEED, y: -y_dir * constants::BOUNCE_SPEED});
+            }
+        }
     }
 }

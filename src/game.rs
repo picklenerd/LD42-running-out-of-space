@@ -73,13 +73,13 @@ impl GameState {
 impl Game {
     pub fn new() -> Self {
         let mut systems: Vec<Box<System>> = Vec::new();
-        systems.push(Box::new(MovementSystem));
-        systems.push(Box::new(RenderingSystem));
         systems.push(Box::new(ControlSystem::new()));
         systems.push(Box::new(PlayerSystem));
+        systems.push(Box::new(MovementSystem));
         systems.push(Box::new(EnemySystem::new()));
-        systems.push(Box::new(DamageSystem));
         systems.push(Box::new(ProjectileSystem));
+        systems.push(Box::new(DamageSystem));
+        systems.push(Box::new(RenderingSystem));
 
         Self {
             state: GameState::new(),
