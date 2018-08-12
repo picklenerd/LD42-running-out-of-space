@@ -9,6 +9,8 @@ class Input {
         window.addEventListener("mousedown", this.onMouseDown.bind(this));
         window.addEventListener("mouseup", this.onMouseUp.bind(this));
         window.addEventListener("mousemove", this.onMouseMove.bind(this));
+
+        document.addEventListener('contextmenu', event => event.preventDefault());
     }
 
     trackKey(keyCode, alias) {
