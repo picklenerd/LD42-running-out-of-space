@@ -1,6 +1,6 @@
 use super::System;
 use components::tags::{Projectile, Player, KeyboardControls};
-use components::movement::{Velocity, Position};
+use components::movement::{Velocity, Position, Slowable};
 use components::graphics::Renderer;
 use components::colliders::Collider;
 use input::Input;
@@ -39,11 +39,17 @@ impl ControlSystem {
         }
         
         if !self.wait_for_reset && self.input.is_control_active("shoot") {
-            self.wait_for_reset = true;
-
             let mut ids: Vec<EntityId> = Vec::new();
             let filter = component_filter!(Player, Position);
             state.ecs().collect_with(&filter, &mut ids);
+            
+            let slowable = state.ecs().get::<Slowable>(ids[0]).unwrap();
+            if slowable.is_slowed {
+               return; 
+            }
+
+            self.wait_for_reset = true;
+
             let start_pos = state.ecs().get::<Position>(ids[0]).unwrap();
 
             let circle = Graphics::new();

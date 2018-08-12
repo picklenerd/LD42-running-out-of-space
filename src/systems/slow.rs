@@ -15,10 +15,8 @@ impl System for SlowSystem {
         
         let mut ice_ids: Vec<EntityId> = Vec::new();
         state.ecs().collect_with(&component_filter!(IceBlock, Collider), &mut ice_ids);
-
-        let mut is_slowed = false;
-
         for id in ids {
+            let mut is_slowed = false;
             let coll = state.ecs().get::<Collider>(id).unwrap();
             for ice in &ice_ids {
                 let ice_coll = state.ecs().get::<Collider>(*ice).unwrap();
