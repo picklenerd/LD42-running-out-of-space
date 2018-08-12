@@ -3,7 +3,10 @@ use recs::EntityId;
 use pixi::graphics::Graphics;
 use systems::System;
 use game::GameState;
-use components::{Collider, Position, Renderer, Wall, Projectile, IceBlock, Enemy};
+use components::colliders::SquareCollider;
+use components::movement::Position;
+use components::graphics::Renderer;
+use components::tags::{Wall, Projectile, IceBlock, Enemy};
 use constants;
 
 pub struct ProjectileSystem;
@@ -24,9 +27,9 @@ impl System for ProjectileSystem {
         ids.append(&mut enemy_ids);
 
         for projectile in projectile_ids {
-            let pc = state.ecs().get::<Collider>(projectile).unwrap();
+            let pc = state.ecs().get::<SquareCollider>(projectile).unwrap();
             for id in &ids {
-                if let Ok(wc) = state.ecs().get::<Collider>(*id) {
+                if let Ok(wc) = state.ecs().get::<SquareCollider>(*id) {
                     if wc.is_colliding(&pc) {
                         let renderer = state.ecs().get::<Renderer>(projectile).unwrap();
                         state.app().remove_child(&renderer.graphics);
@@ -39,7 +42,7 @@ impl System for ProjectileSystem {
                         
                         let ice = state.ecs().create_entity();
                         let _ = state.ecs().set(ice, IceBlock);
-                        let _ = state.ecs().set(ice, Collider{position, width: constants::ICE_BLOCK_SIZE, height: constants::ICE_BLOCK_SIZE});
+                        let _ = state.ecs().set(ice, SquareCollider{position, width: constants::ICE_BLOCK_SIZE, height: constants::ICE_BLOCK_SIZE});
                         
                         if let Ok(exists) = state.ecs().has::<Enemy>(*id) {
                             if exists {

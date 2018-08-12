@@ -5,7 +5,10 @@ use recs::EntityId;
 
 use constants;
 use systems::System;
-use components::{Player, Enemy, Position, Velocity, Renderer, Collider};
+use components::tags::{Player, Enemy};
+use components::movement::{Position, Velocity};
+use components::colliders::SquareCollider;
+use components::graphics::Renderer;
 use pixi::graphics::Graphics;
 use game::GameState;
 
@@ -35,7 +38,7 @@ impl EnemySystem {
         let _ = state.ecs().set(enemy, Velocity{x: 0.0, y: 0.0});
         let _ = state.ecs().set(enemy, Enemy);
         let _ = state.ecs().set(enemy, Renderer{graphics: enemy_circle});
-        let _ = state.ecs().set(enemy, Collider{position: start_pos, width: constants::ENEMY_SIZE, height: constants::ENEMY_SIZE});
+        let _ = state.ecs().set(enemy, SquareCollider{position: start_pos, width: constants::ENEMY_SIZE, height: constants::ENEMY_SIZE});
     }
 }
 

@@ -1,5 +1,8 @@
 use super::System;
-use components::{Velocity, Position, KeyboardControls, Projectile, Player, Renderer, Collider};
+use components::tags::{Projectile, Player, KeyboardControls};
+use components::movement::{Velocity, Position};
+use components::graphics::Renderer;
+use components::colliders::SquareCollider;
 use input::Input;
 use recs::EntityId;
 use game::GameState;
@@ -57,7 +60,7 @@ impl ControlSystem {
             let _ = state.ecs().set(projectile, start_pos.clone());
             let _ = state.ecs().set(projectile, Velocity{x: x_vel * constants::PROJECTILE_SPEED, y: y_vel * constants::PROJECTILE_SPEED});
             let _ = state.ecs().set(projectile, Renderer{graphics: circle});
-            let _ = state.ecs().set(projectile, Collider{position: start_pos, width: constants::PLAYER_SIZE, height: constants::PLAYER_SIZE});
+            let _ = state.ecs().set(projectile, SquareCollider{position: start_pos, width: constants::PLAYER_SIZE, height: constants::PLAYER_SIZE});
         }
     }
 

@@ -1,5 +1,6 @@
 use super::System;
-use components::{Position, Renderer};
+use components::movement::Position;
+use components::graphics::Renderer;
 use recs::EntityId;
 use game::GameState;
 

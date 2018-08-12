@@ -1,5 +1,6 @@
 use super::System;
-use components::{Position, Velocity, Collider};
+use components::movement::{Position, Velocity};
+use components::colliders::SquareCollider;
 use recs::EntityId;
 use game::GameState;
 
@@ -17,7 +18,7 @@ impl System for MovementSystem {
             let new_pos = Position{x: pos.x + vel.x, y: pos.y + vel.y};
             let _ = state.ecs().set(id, new_pos.clone());
 
-            if let Ok(coll) = state.ecs().borrow_mut::<Collider>(id) {
+            if let Ok(coll) = state.ecs().borrow_mut::<SquareCollider>(id) {
                 coll.set_pos(&new_pos);
             }
         }

@@ -1,7 +1,10 @@
 use constants;
 use systems::System;
 use game::GameState;
-use components::{Position, Renderer, Velocity, Player, KeyboardControls, Collider};
+use components::movement::{Position, Velocity};
+use components::graphics::Renderer;
+use components::tags::{Player, KeyboardControls} ;
+use components::colliders::SquareCollider;
 use pixi::graphics::Graphics;
 
 pub struct PlayerSystem;
@@ -21,7 +24,7 @@ impl System for PlayerSystem {
         let _ = state.ecs().set(player, Velocity{x: 0.0, y: 0.0});
         let _ = state.ecs().set(player, Renderer{graphics: player_circle});
         let _ = state.ecs().set(player, KeyboardControls);
-        let _ = state.ecs().set(player, Collider{position: start_pos, width: constants::PLAYER_SIZE, height: constants::PLAYER_SIZE});
+        let _ = state.ecs().set(player, SquareCollider{position: start_pos, width: constants::PLAYER_SIZE, height: constants::PLAYER_SIZE});
     }
     
     fn run(&mut self, _game: &mut GameState, _delta: f64) {

@@ -2,7 +2,7 @@ use stdweb::{ Reference };
 use stdweb::unstable::{ TryInto };
 
 use pixi::JsRef;
-use components::Position;
+use components::movement::Position;
 
 pub struct Input {
     pub js_reference: Reference,
