@@ -1,9 +1,14 @@
-pub mod application;
 pub mod graphics;
 pub mod sprite;
 pub mod loader;
 
 use stdweb::{ Reference };
+use stdweb::unstable::{ TryFrom };
+use stdweb::web::{
+    HtmlElement,
+};
+
+use self::graphics::Graphics;
 
 pub trait JsRef {
     fn get_ref(&self) -> &Reference;
@@ -23,5 +28,61 @@ pub trait Positionable {
     fn set_position(&self, x: f64, y: f64) {
         self.set_x(x);
         self.set_y(y);
+    }
+}
+
+pub struct Pixi {
+    pub js_reference: Reference,
+}
+
+impl JsRef for Pixi {
+    fn get_ref(&self) -> &Reference {
+        &self.js_reference
+    }
+}
+
+impl Pixi {
+    pub fn new(width: u32, height: u32, background_color: u32) -> Self {
+        let app = js! {
+            return new PIXI.Application ({
+                width: @{width},
+                height: @{height},
+                backgroundColor: @{background_color},
+            });
+        };
+
+        Self {
+            js_reference: app.into_reference().unwrap(),
+        }
+    }
+
+    pub fn view(&self) -> HtmlElement {
+        let view = js! {
+            const app = @{&self.js_reference};
+            return app.view;
+        };
+        
+        HtmlElement::try_from(view).unwrap()
+    }
+
+    pub fn add_child(&self, child: &impl JsRef) {
+        js! { @(no_return)
+            const app = @{&self.js_reference};
+            app.stage.addChild(@{&child.get_ref()});
+        };
+    }
+
+    pub fn add_child_at(&self, child: &impl JsRef, index: u32) {
+        js! { @(no_return)
+            const app = @{&self.js_reference};
+            app.stage.addChildAt(@{&child.get_ref()}, @{index});
+        };
+    }
+
+    pub fn remove_child(&self, child: &impl JsRef) {
+        js! { @(no_return)
+            const app = @{&self.js_reference};
+            app.stage.removeChild(@{&child.get_ref()});
+        };
     }
 }

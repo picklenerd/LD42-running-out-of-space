@@ -16,7 +16,7 @@ impl System for PlayerSystem {
         let player_circle = Graphics::new();
         player_circle.begin_fill(constants::PLAYER_COLOR);
         player_circle.draw_ellipse(0.0, 0.0, constants::PLAYER_SIZE, constants::PLAYER_SIZE);
-        state.app().add_child(&player_circle);
+        state.pixi().add_child(&player_circle);
 
         let start_pos = Position{x: constants::PLAYER_START_X, y: constants::PLAYER_START_Y};
 
@@ -29,21 +29,6 @@ impl System for PlayerSystem {
         let _ = state.ecs().set(player, SquareCollider{position: start_pos, width: constants::PLAYER_SIZE, height: constants::PLAYER_SIZE});
     }
     
-    fn run(&mut self, state: &mut GameState, _delta: f64) {
-        let mut player_ids = Vec::new();
-        state.ecs().collect_with(&component_filter!(Player), &mut player_ids);
-        let player = player_ids[0];
-        
-        let mut ice_ids: Vec<EntityId> = Vec::new();
-        state.ecs().collect_with(&component_filter!(IceBlock, SquareCollider), &mut ice_ids);
-
-        let player_coll = state.ecs().get::<SquareCollider>(player).unwrap();
-        for ice in &ice_ids {
-            let blocker_coll = state.ecs().get::<SquareCollider>(*ice).unwrap();
-            let (x_dir, y_dir) = blocker_coll.collision_direction(&player_coll);
-            if (x_dir, y_dir) != (0.0, 0.0) {
-                let _ = state.ecs().set(player, Velocity{x: -x_dir * constants::BOUNCE_SPEED, y: -y_dir * constants::BOUNCE_SPEED});
-            }
-        }
+    fn run(&mut self, _state: &mut GameState, _delta: f64) {
     }
 }

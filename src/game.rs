@@ -11,7 +11,7 @@ use systems::enemy::EnemySystem;
 use systems::player::PlayerSystem;
 use systems::damage::DamageSystem;
 use systems::projectile::ProjectileSystem;
-use pixi::application::Application;
+use pixi::Pixi;
 
 pub struct Game {
     state: GameState,
@@ -19,7 +19,7 @@ pub struct Game {
 }
 
 pub struct GameState {
-    app: Application,
+    pixi: Pixi,
     ecs: Ecs,
 }
 
@@ -30,17 +30,17 @@ impl GameState {
         
         body.append_child(&div);
 
-        let app = Application::new(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, constants::BACKGROUND_COLOR);
-        body.append_child(&app.view());
+        let pixi = Pixi::new(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, constants::BACKGROUND_COLOR);
+        body.append_child(&pixi.view());
 
         Self { 
-            app, 
+            pixi, 
             ecs: Ecs::new(),
         }
     }
 
-    pub fn app(&mut self) -> &mut Application {
-        &mut self.app
+    pub fn pixi(&mut self) -> &mut Pixi {
+        &mut self.pixi
     }
 
     pub fn ecs(&mut self) -> &mut Ecs {

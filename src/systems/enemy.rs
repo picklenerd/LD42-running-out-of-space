@@ -27,7 +27,7 @@ impl EnemySystem {
         let enemy_circle = Graphics::new();
         enemy_circle.begin_fill(constants::ENEMY_COLOR);
         enemy_circle.draw_ellipse(0.0, 0.0, constants::ENEMY_SIZE, constants::ENEMY_SIZE);
-        state.app().add_child(&enemy_circle);
+        state.pixi().add_child(&enemy_circle);
         
         let enemy = state.ecs().create_entity();
         let start_pos = self.get_spawn_position(state);

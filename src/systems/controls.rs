@@ -49,7 +49,7 @@ impl ControlSystem {
             let circle = Graphics::new();
             circle.begin_fill(constants::PROJECTILE_COLOR);
             circle.draw_ellipse(0.0, 0.0, constants::PROJECTILE_SIZE, constants::PROJECTILE_SIZE);
-            state.app().add_child(&circle);
+            state.pixi().add_child(&circle);
 
             let mouse_pos = self.input.mouse_position();
 

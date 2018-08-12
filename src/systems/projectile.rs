@@ -14,19 +14,18 @@ pub struct ProjectileSystem;
 impl ProjectileSystem {
     fn splat(&self, state: &mut GameState, projectile: EntityId) {
         let renderer = state.ecs().get::<Renderer>(projectile).unwrap();
-        state.app().remove_child(&renderer.graphics);
+        state.pixi().remove_child(&renderer.graphics);
 
         let position = state.ecs().get::<Position>(projectile).unwrap();
 
         let circle = Graphics::new();
         circle.begin_fill(constants::ICE_BLOCK_COLOR);
         circle.draw_ellipse(position.x as f64, position.y as f64, constants::ICE_BLOCK_SIZE, constants::ICE_BLOCK_SIZE);
-        state.app().add_child(&circle);
+        state.pixi().add_child_at(&circle, 0);
         
         let ice = state.ecs().create_entity();
         let _ = state.ecs().set(ice, IceBlock);
         let _ = state.ecs().set(ice, SquareCollider{position, width: constants::ICE_BLOCK_SIZE, height: constants::ICE_BLOCK_SIZE});
-        
 
         let _ = state.ecs().destroy_entity(projectile);
     }
@@ -59,7 +58,7 @@ impl System for ProjectileSystem {
                         if let Ok(exists) = state.ecs().has::<Enemy>(*blocker) {
                             if exists {
                                 let renderer = state.ecs().get::<Renderer>(*blocker).unwrap();
-                                state.app().remove_child(&renderer.graphics);
+                                state.pixi().remove_child(&renderer.graphics);
                                 let _ = state.ecs().destroy_entity(*blocker);
                             }
                         }
