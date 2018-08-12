@@ -23,6 +23,7 @@ pub struct GameState {
     pixi: Pixi,
     ecs: Ecs,
     score: i32,
+    game_over: bool,
 }
 
 impl GameState {
@@ -39,6 +40,7 @@ impl GameState {
             pixi, 
             ecs: Ecs::new(),
             score: 0,
+            game_over: false,
         }
     }
 
@@ -52,6 +54,10 @@ impl GameState {
 
     pub fn add_score(&mut self, score: i32) {
         self.score += score;
+    }
+
+    pub fn trigger_game_over(&mut self) {
+        self.game_over = true;
     }
 }
 
@@ -82,6 +88,10 @@ impl Game {
     pub fn update(&mut self, delta: f64) {
         for system in &mut self.systems {
             system.run(&mut self.state, delta);
+        }
+        if self.state.game_over {
+            console!(log, "GAME OVER!");
+            console!(log, format!("Score: {}", self.state.score));
         }
     }
 }

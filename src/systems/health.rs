@@ -24,7 +24,7 @@ impl System for HealthSystem {
             // Check to see if they player got eaten
             let coll = state.ecs().get::<Collider>(id).unwrap();
             if coll.is_colliding(&player_coll) {
-                console!(log, "ouch!");
+                state.trigger_game_over();
             }
 
             // Check to see if the enemy is dead
