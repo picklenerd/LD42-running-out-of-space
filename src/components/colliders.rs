@@ -9,8 +9,8 @@ impl SquareCollider {
     }
 
     pub fn is_colliding(&self, other: &SquareCollider) -> bool {
-        (self.position.x - other.position.x).abs() <= ((self.width as f64 / 2.0) + (other.width as f64 / 2.0)) &&
-        (self.position.y - other.position.y).abs() <= ((self.height as f64 / 2.0) + (other.height as f64 / 2.0))
+        (self.position.x - other.position.x).abs() <= ((self.width as f64 / 1.25) + (other.width as f64 / 1.25)) &&
+        (self.position.y - other.position.y).abs() <= ((self.height as f64 / 1.25) + (other.height as f64 / 1.25))
     }
 
     pub fn collision_direction(&self, other: &SquareCollider) -> (f64, f64) {

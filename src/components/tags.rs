@@ -11,7 +11,4 @@ pub struct Enemy;
 pub struct Projectile;
 
 #[derive(Clone, PartialEq, Debug)]
-pub struct Wall;
-
-#[derive(Clone, PartialEq, Debug)]
 pub struct IceBlock;
