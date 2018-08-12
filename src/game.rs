@@ -11,6 +11,7 @@ use systems::enemy::EnemySystem;
 use systems::player::PlayerSystem;
 use systems::damage::DamageSystem;
 use systems::projectile::ProjectileSystem;
+use systems::slow::SlowSystem;
 use pixi::Pixi;
 
 pub struct Game {
@@ -53,6 +54,7 @@ impl Game {
         let mut systems: Vec<Box<System>> = Vec::new();
         systems.push(Box::new(ControlSystem::new()));
         systems.push(Box::new(PlayerSystem));
+        systems.push(Box::new(SlowSystem));
         systems.push(Box::new(MovementSystem));
         systems.push(Box::new(EnemySystem::new()));
         systems.push(Box::new(ProjectileSystem));

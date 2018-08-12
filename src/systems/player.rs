@@ -1,11 +1,9 @@
-use recs::EntityId;
-
 use constants;
 use systems::System;
 use game::GameState;
-use components::movement::{Position, Velocity};
+use components::movement::{Position, Velocity, Slowable};
 use components::graphics::Renderer;
-use components::tags::{Player, KeyboardControls, IceBlock};
+use components::tags::{Player, KeyboardControls};
 use components::colliders::Collider;
 use pixi::graphics::Graphics;
 
@@ -27,6 +25,7 @@ impl System for PlayerSystem {
         let _ = state.ecs().set(player, Renderer{graphics: player_circle});
         let _ = state.ecs().set(player, KeyboardControls);
         let _ = state.ecs().set(player, Collider{position: start_pos, radius: constants::PLAYER_SIZE});
+        let _ = state.ecs().set(player, Slowable::new(constants::PLAYER_SLOWED_MULTIPLIER));
     }
     
     fn run(&mut self, _state: &mut GameState, _delta: f64) {

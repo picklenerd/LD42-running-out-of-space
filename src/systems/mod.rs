@@ -5,6 +5,7 @@ pub mod player;
 pub mod enemy;
 pub mod damage;
 pub mod projectile;
+pub mod slow;
 
 use game::GameState;
 

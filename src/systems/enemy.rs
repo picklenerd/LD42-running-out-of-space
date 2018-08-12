@@ -6,7 +6,7 @@ use recs::EntityId;
 use constants;
 use systems::System;
 use components::tags::{Player, Enemy};
-use components::movement::{Position, Velocity};
+use components::movement::{Position, Velocity, Slowable};
 use components::colliders::Collider;
 use components::graphics::Renderer;
 use pixi::graphics::Graphics;
@@ -36,6 +36,7 @@ impl EnemySystem {
         let _ = state.ecs().set(enemy, Enemy);
         let _ = state.ecs().set(enemy, Renderer{graphics: enemy_circle});
         let _ = state.ecs().set(enemy, Collider{position: start_pos, radius: constants::ENEMY_SIZE});
+        let _ = state.ecs().set(enemy, Slowable::new(constants::ENEMY_SLOWED_MULTIPLIER));
     }
 
     fn get_spawn_position(&mut self, state: &mut GameState) -> Position { 
