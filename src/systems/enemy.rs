@@ -60,7 +60,7 @@ impl System for EnemySystem {
         state.ecs().collect_with(&filter, &mut enemy_ids);
 
         let now = Date::now();
-        if now - self.last_spawn_time >= constants::TIME_BETWEEN_SPAWNS && enemy_ids.len() < 0 as usize {
+        if now - self.last_spawn_time >= constants::TIME_BETWEEN_SPAWNS && enemy_ids.len() < constants::MAX_ENEMIES as usize {
             self.spawn_enemy(state);
             self.last_spawn_time = now;
         }

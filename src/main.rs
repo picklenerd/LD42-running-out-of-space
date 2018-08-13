@@ -22,6 +22,23 @@ use stdweb::unstable::TryInto;
 use ::game::Game;
 
 fn main() {
+    let loaded_callback = move || init();
+
+    js! {@ (no_return)
+        const callback = @{loaded_callback};
+        PIXI.loader
+            .add("penguin", "penguin.png")
+            .add("bear", "bear.png")
+            .add("shot", "shot.png")
+            .add("ice", "ice.png")
+            .load(() => {
+                callback();
+                callback.drop();
+            });
+    };
+}
+
+fn init() {
     let body = document().body().unwrap();
     
     let div = document().create_element("div").unwrap();

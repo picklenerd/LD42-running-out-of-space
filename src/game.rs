@@ -73,16 +73,6 @@ impl GameState {
         let pixi = Pixi::new(constants::SCREEN_WIDTH, constants::SCREEN_HEIGHT, constants::BACKGROUND_COLOR);
         div.append_child(&pixi.view());
 
-        js! {@ (no_return)
-            let loaded = false;
-            PIXI.loader.add("penguin", "penguin.png")
-                       .add("bear", "bear.png")
-                       .add("shot", "shot.png")
-                       .add("ice", "ice.png")
-                       .load(() => {loaded = true;});
-            while (!loaded) {}
-        };
-
         Self { 
             pixi, 
             ecs: Ecs::new(),

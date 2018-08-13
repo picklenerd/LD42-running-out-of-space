@@ -7,6 +7,8 @@ use stdweb::web::{
     HtmlElement,
 };
 
+use constants;
+
 pub trait JsRef {
     fn get_ref(&self) -> &Reference;
 }
@@ -34,8 +36,8 @@ pub trait Sizable {
     fn set_width(&self, width: f64);
     fn set_height(&self, height: f64);
     fn set_size(&self, width: f64, height: f64) {
-        self.set_width(width);
-        self.set_height(height);
+        self.set_width(width * constants::SPRITE_SIZE_MULTIPLIER);
+        self.set_height(height * constants::SPRITE_SIZE_MULTIPLIER);
     }
     fn set_square_size(&self, size: f64) {
         self.set_size(size, size);
