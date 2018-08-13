@@ -44,6 +44,14 @@ pub trait Sizable {
     }
 }
 
+pub trait Rotatable {
+    fn get_angle(&self) -> f64;
+    fn set_angle(&self, angle: f64);
+    fn add_angle(&self, angle: f64) {
+        self.set_angle(self.get_angle() + angle);
+    }
+}
+
 pub struct Pixi {
     pub js_reference: Reference,
 }

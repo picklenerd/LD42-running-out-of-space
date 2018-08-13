@@ -9,7 +9,7 @@ use recs::EntityId;
 use game::GameState;
 use constants;
 use pixi::sprite::Sprite;
-use pixi::Sizable;
+use pixi::{Sizable, Rotatable};
 
 pub struct ControlSystem {
     input: Input,
@@ -80,6 +80,7 @@ impl ControlSystem {
         let mut ids: Vec<EntityId> = Vec::new();
         let filter = component_filter!(KeyboardControls, Velocity);
         state.ecs().collect_with(&filter, &mut ids);
+        
         for id in ids {
             let mut x_dir: f64 = 0.0;
             let mut y_dir: f64 = 0.0;
@@ -106,11 +107,30 @@ impl ControlSystem {
             let _ = state.ecs().set(id, Velocity{x: angle.cos() * constants::PLAYER_SPEED, y: angle.sin() * constants::PLAYER_SPEED});
         }
     }
+
+    fn handle_rotation(&mut self, state: &mut GameState) {
+        let mut ids: Vec<EntityId> = Vec::new();
+        let filter = component_filter!(Player);
+        state.ecs().collect_with(&filter, &mut ids);
+        let player = ids[0];
+
+        let player_pos = state.ecs().get::<Position>(player).unwrap();
+        let mouse_pos = self.input.mouse_position();
+
+        let dx = mouse_pos.x - player_pos.x;
+        let dy = mouse_pos.y - player_pos.y;
+        
+        let angle = dy.atan2(dx);
+
+        let renderer = state.ecs().borrow_mut::<Renderer>(player).unwrap();
+        renderer.sprite.set_angle(angle);
+    }
 }
 
 impl System for ControlSystem {
     fn run(&mut self, state: &mut GameState, _delta: f64) {
         self.handle_shooting(state);
         self.handle_movement(state);
+        self.handle_rotation(state);
     }
 }

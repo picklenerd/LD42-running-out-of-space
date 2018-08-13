@@ -14,7 +14,7 @@ use components::graphics::Renderer;
 use components::damage::Health;
 use pixi::sprite::Sprite;
 use game::GameState;
-use pixi::Sizable;
+use pixi::{Sizable, Rotatable};
 
 pub struct EnemySystem {
     rng: OsRng,
@@ -41,7 +41,7 @@ impl EnemySystem {
         let _ = state.ecs().set(enemy, Enemy);
         let _ = state.ecs().set(enemy, Health{amount: constants::ENEMY_HEALTH});
         let _ = state.ecs().set(enemy, Renderer{sprite});
-        let _ = state.ecs().set(enemy, Collider{position: start_pos, radius: constants::ENEMY_SIZE});
+        let _ = state.ecs().set(enemy, Collider{position: start_pos, radius: constants::ENEMY_SIZE * 2});
         let _ = state.ecs().set(enemy, Slowable::new(constants::ENEMY_SLOWED_MULTIPLIER));
     }
 
@@ -88,5 +88,8 @@ impl EnemySystem {
         let y_vel = constants::ENEMY_SPEED * y_dir;
 
         let _ = state.ecs().set(enemy_id, Velocity{x: x_vel, y: y_vel});
+
+        let renderer = state.ecs().borrow_mut::<Renderer>(enemy_id).unwrap();
+        renderer.sprite.set_angle(y_dir.atan2(x_dir) - 1.57);
     }
 }

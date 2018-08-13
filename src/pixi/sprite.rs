@@ -1,7 +1,7 @@
 use stdweb::{ Reference };
 use stdweb::unstable::{ TryInto };
 
-use super::{ JsRef, Positionable, Sizable };
+use super::{ JsRef, Positionable, Sizable, Rotatable };
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct Sprite {
@@ -12,6 +12,8 @@ impl Sprite {
     pub fn new(alias: &str) -> Self {
         let sprite = js! {
             const sprite = new PIXI.Sprite(PIXI.loader.resources[@{alias}].texture);
+            sprite.anchor.x = 0.5;
+            sprite.anchor.y = 0.5;
             return sprite;
         };
         
@@ -95,6 +97,23 @@ impl Sizable for Sprite {
         js! { @(no_return)
             const rect = @{&self.js_reference};
             rect.height = @{height};
+        };
+    }
+}
+
+impl Rotatable for Sprite {
+    fn get_angle(&self) -> f64 {
+        let angle = js! {
+            const me = @{&self.js_reference};
+            return me.rotation;
+        };
+        angle.try_into().unwrap()
+    }
+
+    fn set_angle(&self, angle: f64) {
+        js! { @(no_return)
+            const me = @{&self.js_reference};
+            me.rotation = @{angle};
         };
     }
 }
