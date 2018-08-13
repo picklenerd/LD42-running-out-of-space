@@ -12,8 +12,9 @@ use components::movement::{Position, Velocity, Slowable};
 use components::colliders::Collider;
 use components::graphics::Renderer;
 use components::damage::Health;
-use pixi::graphics::Graphics;
+use pixi::sprite::Sprite;
 use game::GameState;
+use pixi::Sizable;
 
 pub struct EnemySystem {
     rng: OsRng,
@@ -29,10 +30,9 @@ impl EnemySystem {
     }
 
     fn spawn_enemy(&mut self, state: &mut GameState) {
-        let enemy_circle = Graphics::new();
-        enemy_circle.begin_fill(constants::ENEMY_COLOR);
-        enemy_circle.draw_ellipse(0.0, 0.0, constants::ENEMY_SIZE, constants::ENEMY_SIZE);
-        state.pixi().add_child(&enemy_circle);
+        let sprite = Sprite::new("bear");
+        sprite.set_square_size(constants::ENEMY_SIZE as f64);
+        state.pixi().add_child(&sprite);
         
         let enemy = state.ecs().create_entity();
         let start_pos = self.get_spawn_position();
@@ -40,7 +40,7 @@ impl EnemySystem {
         let _ = state.ecs().set(enemy, Velocity{x: 0.0, y: 0.0});
         let _ = state.ecs().set(enemy, Enemy);
         let _ = state.ecs().set(enemy, Health{amount: constants::ENEMY_HEALTH});
-        let _ = state.ecs().set(enemy, Renderer{graphics: enemy_circle});
+        let _ = state.ecs().set(enemy, Renderer{sprite});
         let _ = state.ecs().set(enemy, Collider{position: start_pos, radius: constants::ENEMY_SIZE});
         let _ = state.ecs().set(enemy, Slowable::new(constants::ENEMY_SLOWED_MULTIPLIER));
     }
@@ -60,7 +60,7 @@ impl System for EnemySystem {
         state.ecs().collect_with(&filter, &mut enemy_ids);
 
         let now = Date::now();
-        if now - self.last_spawn_time >= constants::TIME_BETWEEN_SPAWNS && enemy_ids.len() < constants::MAX_ENEMIES as usize {
+        if now - self.last_spawn_time >= constants::TIME_BETWEEN_SPAWNS && enemy_ids.len() < 0 as usize {
             self.spawn_enemy(state);
             self.last_spawn_time = now;
         }

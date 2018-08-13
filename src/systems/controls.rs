@@ -8,7 +8,8 @@ use input::Input;
 use recs::EntityId;
 use game::GameState;
 use constants;
-use pixi::graphics::Graphics;
+use pixi::sprite::Sprite;
+use pixi::Sizable;
 
 pub struct ControlSystem {
     input: Input,
@@ -53,10 +54,9 @@ impl ControlSystem {
 
             let start_pos = state.ecs().get::<Position>(ids[0]).unwrap();
 
-            let circle = Graphics::new();
-            circle.begin_fill(constants::PROJECTILE_COLOR);
-            circle.draw_ellipse(0.0, 0.0, constants::PROJECTILE_SIZE, constants::PROJECTILE_SIZE);
-            state.pixi().add_child(&circle);
+            let sprite = Sprite::new("shot");
+            sprite.set_square_size(constants::PROJECTILE_SIZE as f64);
+            state.pixi().add_child(&sprite);
 
             let mouse_pos = self.input.mouse_position();
 
@@ -66,7 +66,7 @@ impl ControlSystem {
             let _ = state.ecs().set(projectile, Projectile);
             let _ = state.ecs().set(projectile, start_pos.clone());
             let _ = state.ecs().set(projectile, Velocity{x: x_vel * constants::PROJECTILE_SPEED, y: y_vel * constants::PROJECTILE_SPEED});
-            let _ = state.ecs().set(projectile, Renderer{graphics: circle});
+            let _ = state.ecs().set(projectile, Renderer{sprite});
             let _ = state.ecs().set(projectile, Collider{position: start_pos, radius: constants::PLAYER_SIZE});
             let _ = state.ecs().set(projectile, Damage{amount: constants::PROJECTILE_DAMAGE});
 

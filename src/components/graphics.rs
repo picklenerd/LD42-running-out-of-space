@@ -1,4 +1,4 @@
-use ::pixi::graphics::Graphics;
+use pixi::sprite::Sprite;
 
 #[derive(Clone, PartialEq, Debug)]
-pub struct Renderer{pub graphics: Graphics}
+pub struct Renderer{pub sprite: Sprite}

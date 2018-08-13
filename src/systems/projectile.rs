@@ -1,6 +1,6 @@
 use recs::EntityId;
 
-use pixi::graphics::Graphics;
+use pixi::sprite::Sprite;
 use systems::System;
 use game::GameState;
 use components::colliders::Collider;
@@ -9,21 +9,21 @@ use components::graphics::Renderer;
 use components::tags::{Projectile, IceBlock, Enemy};
 use components::damage::{Health, Damage};
 use constants;
+use pixi::Sizable;
 
 pub struct ProjectileSystem;
 
 impl ProjectileSystem {
     fn splat(&self, state: &mut GameState, projectile: EntityId, turn_into_ice: bool) {
         let renderer = state.ecs().get::<Renderer>(projectile).unwrap();
-        state.pixi().remove_child(&renderer.graphics);
+        state.pixi().remove_child(&renderer.sprite);
 
         if turn_into_ice {
             let position = state.ecs().get::<Position>(projectile).unwrap();
 
-            let circle = Graphics::new();
-            circle.begin_fill(constants::ICE_BLOCK_COLOR);
-            circle.draw_ellipse(position.x as f64, position.y as f64, constants::ICE_BLOCK_SIZE, constants::ICE_BLOCK_SIZE);
-            state.pixi().add_child_at(&circle, 0);
+            let sprite = Sprite::new("ice");
+            sprite.set_square_size(constants::ICE_BLOCK_SIZE as f64);
+            state.pixi().add_child_at(&sprite, 0);
             
             let ice = state.ecs().create_entity();
             let _ = state.ecs().set(ice, IceBlock);

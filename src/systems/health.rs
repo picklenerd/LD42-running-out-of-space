@@ -31,7 +31,7 @@ impl System for HealthSystem {
             if let Ok(health) = state.ecs().get::<Health>(id) {
                 if health.amount <= 0 {
                     let renderer = state.ecs().get::<Renderer>(id).unwrap();
-                    state.pixi().remove_child(&renderer.graphics);
+                    state.pixi().remove_child(&renderer.sprite);
                     let _ = state.ecs().destroy_entity(id);
                     state.add_score(constants::ENEMY_SCORE);
                     continue;

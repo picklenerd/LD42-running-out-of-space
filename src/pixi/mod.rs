@@ -1,6 +1,5 @@
 pub mod graphics;
 pub mod sprite;
-pub mod loader;
 
 use stdweb::{ Reference };
 use stdweb::unstable::{ TryFrom };
@@ -26,6 +25,20 @@ pub trait Positionable {
     fn set_position(&self, x: f64, y: f64) {
         self.set_x(x);
         self.set_y(y);
+    }
+}
+
+pub trait Sizable {
+    fn get_width(&self) -> f64;
+    fn get_height(&self) -> f64;
+    fn set_width(&self, width: f64);
+    fn set_height(&self, height: f64);
+    fn set_size(&self, width: f64, height: f64) {
+        self.set_width(width);
+        self.set_height(height);
+    }
+    fn set_square_size(&self, size: f64) {
+        self.set_size(size, size);
     }
 }
 

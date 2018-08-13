@@ -15,7 +15,7 @@ impl System for RenderingSystem {
         state.ecs().collect_with(&filter, &mut ids);
         for id in ids {
             let pos = state.ecs().get::<Position>(id).unwrap();
-            let graphics = state.ecs().get::<Renderer>(id).unwrap().graphics;
+            let graphics = state.ecs().get::<Renderer>(id).unwrap().sprite;
             graphics.set_position(pos.x, pos.y);
         }
     }

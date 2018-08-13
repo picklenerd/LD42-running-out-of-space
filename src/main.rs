@@ -44,7 +44,8 @@ fn start_new_game() {
     document().body().unwrap().remove_child(&menu);
 
     let mut game = Game::new();
-    game.init();
+    game.start();
+
     window().request_animation_frame(move |delta| update(game, delta));
 }
 

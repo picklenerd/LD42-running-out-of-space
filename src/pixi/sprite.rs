@@ -1,7 +1,7 @@
 use stdweb::{ Reference };
 use stdweb::unstable::{ TryInto };
 
-use super::{ JsRef, Positionable };
+use super::{ JsRef, Positionable, Sizable };
 
 #[derive(Clone, PartialEq, Debug)]
 pub struct Sprite {
@@ -63,6 +63,38 @@ impl Positionable for Sprite {
             const rect = @{&self.js_reference};
             rect.x = @{x};
             rect.y = @{y};
+        };
+    }
+}
+
+impl Sizable for Sprite {
+    fn get_width(&self) -> f64 {
+        let x = js! { 
+            const me = @{&self.js_reference};
+            return me.width;
+        };
+        x.try_into().unwrap()
+    }
+
+    fn set_width(&self, width: f64) {
+        js! { @(no_return)
+            const rect = @{&self.js_reference};
+            rect.width = @{width};
+        };
+    }
+
+    fn get_height(&self) -> f64 {
+        let y = js! { 
+            const me = @{&self.js_reference};
+            return me.height;
+        };
+        y.try_into().unwrap()
+    }
+
+    fn set_height(&self, height: f64) {
+        js! { @(no_return)
+            const rect = @{&self.js_reference};
+            rect.height = @{height};
         };
     }
 }
