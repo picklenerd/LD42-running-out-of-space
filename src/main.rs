@@ -46,7 +46,7 @@ fn init() {
     body.append_child(&div);
 
     let title_text: HtmlElement = document().create_element("h1").unwrap().try_into().unwrap();
-    title_text.set_text_content("Running Out of Space");
+    title_text.set_text_content("Icescape");
     div.append_child(&title_text);
 
     let start_button: HtmlElement = document().create_element("button").unwrap().try_into().unwrap();

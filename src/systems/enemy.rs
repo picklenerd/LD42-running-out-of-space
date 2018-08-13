@@ -19,6 +19,7 @@ use pixi::{Sizable, Rotatable};
 pub struct EnemySystem {
     rng: OsRng,
     last_spawn_time: f64,
+    current_level: u32,
 }
 
 impl EnemySystem {
@@ -26,6 +27,7 @@ impl EnemySystem {
         Self {
             rng: OsRng::new().unwrap(),
             last_spawn_time: 0.0,
+            current_level: 1,
         }
     }
 
@@ -43,6 +45,8 @@ impl EnemySystem {
         let _ = state.ecs().set(enemy, Renderer{sprite});
         let _ = state.ecs().set(enemy, Collider{position: start_pos, radius: constants::ENEMY_SIZE * 2});
         let _ = state.ecs().set(enemy, Slowable::new(constants::ENEMY_SLOWED_MULTIPLIER));
+
+        self.current_level += 1;
     }
 
     fn get_spawn_position(&mut self) -> Position { 
@@ -60,7 +64,9 @@ impl System for EnemySystem {
         state.ecs().collect_with(&filter, &mut enemy_ids);
 
         let now = Date::now();
-        if now - self.last_spawn_time >= constants::TIME_BETWEEN_SPAWNS && enemy_ids.len() < constants::MAX_ENEMIES as usize {
+        if now - self.last_spawn_time >= constants::TIME_BETWEEN_SPAWNS
+            && enemy_ids.len() < constants::MAX_ENEMIES as usize
+            && enemy_ids.len() <= (self.current_level / 4) as usize {
             self.spawn_enemy(state);
             self.last_spawn_time = now;
         }
