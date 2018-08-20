@@ -1,11 +1,9 @@
-Play here:
+Play here:  
 http://picklenerd.com/games/ld42/
 
-WSAD to move
-
-Mouse to aim
-
-Left click to shoot
+* WSAD to move
+* Mouse to aim
+* Left click to shoot
 
 Every time you shoot, you leave a blue ice blob on the ground.  If you're 
 standing on a blue blob, you'll move more slowly and you won't be able to shoot
